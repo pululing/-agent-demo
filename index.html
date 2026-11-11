@@ -1,0 +1,3843 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>澜景财富 Lumina Wealth · 私人银行与智能资产配置</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      /* Daylight Theme Tokens */
+      --bg-canvas: #F5F5F7;
+      --surface-card: #FFFFFF;
+      --surface-subtle: #F7F7FA;
+      --surface-elevated: #FFFFFF;
+      --surface-glass: rgba(255, 255, 255, 0.78);
+      --surface-overlay: rgba(29, 29, 31, 0.36);
+
+      --text-primary: #1D1D1F;
+      --text-secondary: #424245;
+      --text-muted: #86868B;
+      --text-faint: #AEAEB2;
+
+      --border-hairline: rgba(0, 0, 0, 0.065);
+      --border-card: rgba(0, 0, 0, 0.05);
+      --pill-track: rgba(118, 118, 128, 0.11);
+
+      /* Semantic Accents */
+      --accent-blue: #0071E3;
+      --accent-blue-hover: #0077ED;
+      --accent-blue-soft: rgba(0, 113, 227, 0.1);
+
+      --accent-green: #1D9E53;
+      --accent-green-soft: rgba(29, 158, 83, 0.11);
+
+      --accent-indigo: #5856D6;
+      --accent-indigo-soft: rgba(88, 86, 214, 0.11);
+
+      --accent-amber: #E67E00;
+      --accent-amber-soft: rgba(230, 126, 0, 0.12);
+
+      --accent-coral: #D9383A;
+      --accent-coral-soft: rgba(217, 56, 58, 0.11);
+
+      --radius-2xl: 24px;
+      --radius-xl: 20px;
+      --radius-lg: 15px;
+      --radius-md: 12px;
+      --radius-pill: 999px;
+
+      --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+      --shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.07), 0 2px 6px rgba(0, 0, 0, 0.03);
+      --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.18), 0 4px 16px rgba(0, 0, 0, 0.06);
+
+      /* Motion Curves */
+      --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+      --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "PingFang SC", "Noto Sans SC", sans-serif;
+    }
+
+    html[data-theme="dark"] {
+      --bg-canvas: #0B0C10;
+      --surface-card: #16181F;
+      --surface-subtle: #1E2029;
+      --surface-elevated: #222530;
+      --surface-glass: rgba(22, 24, 31, 0.8);
+      --surface-overlay: rgba(0, 0, 0, 0.65);
+
+      --text-primary: #F5F5F7;
+      --text-secondary: #C7C7CC;
+      --text-muted: #8E8E93;
+      --text-faint: #636366;
+
+      --border-hairline: rgba(255, 255, 255, 0.08);
+      --border-card: rgba(255, 255, 255, 0.07);
+      --pill-track: rgba(255, 255, 255, 0.1);
+
+      --accent-blue: #2997FF;
+      --accent-blue-hover: #47A8FF;
+      --accent-blue-soft: rgba(41, 151, 255, 0.16);
+
+      --accent-green: #30D158;
+      --accent-green-soft: rgba(48, 209, 88, 0.15);
+
+      --accent-indigo: #7D7AFF;
+      --accent-indigo-soft: rgba(125, 122, 255, 0.16);
+
+      --accent-amber: #FF9F0A;
+      --accent-amber-soft: rgba(255, 159, 10, 0.16);
+
+      --shadow-card: 0 8px 28px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.2);
+      --shadow-hover: 0 12px 36px rgba(0, 0, 0, 0.48);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg-canvas);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.35s var(--ease-spring), color 0.35s var(--ease-spring);
+    }
+
+    /* Keyframe Animations */
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.99);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes chartDraw {
+      from {
+        stroke-dashoffset: 900;
+      }
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    /* ======================================================================
+       1. APPLE DYNAMIC ISLAND TOAST NOTIFICATION
+       ====================================================================== */
+    .dynamic-toast {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-80px) scale(0.9);
+      background: #1D1D1F;
+      color: #FFFFFF;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.45s var(--ease-spring), opacity 0.35s var(--ease-spring);
+    }
+
+    .dynamic-toast.show {
+      transform: translateX(-50%) translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    .toast-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #30D158;
+    }
+
+    /* ======================================================================
+       2. TOP GLASSMORPHIC NAVIGATION BAR
+       ====================================================================== */
+    .top-nav {
+      height: 62px;
+      background: var(--surface-glass);
+      backdrop-filter: saturate(180%) blur(24px);
+      -webkit-backdrop-filter: saturate(180%) blur(24px);
+      border-bottom: 1px solid var(--border-hairline);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 30;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-toggle-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      border: 1px solid var(--border-hairline);
+      background: var(--surface-card);
+      color: var(--text-secondary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s var(--ease-spring);
+    }
+
+    .icon-toggle-btn:hover {
+      background: var(--surface-subtle);
+      color: var(--text-primary);
+      transform: scale(1.03);
+    }
+
+    .icon-toggle-btn:active {
+      transform: scale(0.95);
+    }
+
+    .icon-toggle-btn.active {
+      background: var(--accent-blue-soft);
+      color: var(--accent-blue);
+      border-color: transparent;
+    }
+
+    .icon-toggle-btn svg {
+      width: 17px;
+      height: 17px;
+      stroke: currentColor;
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: 4px;
+    }
+
+    .brand-orb {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0071E3 0%, #5856D6 60%, #34C759 100%);
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 2px 10px rgba(0, 113, 227, 0.28);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .brand-orb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      color: var(--text-primary);
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      padding-left: 10px;
+      border-left: 1px solid var(--border-hairline);
+    }
+
+    .nav-center {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .account-switcher {
+      display: inline-flex;
+      background: var(--pill-track);
+      padding: 3px;
+      border-radius: var(--radius-pill);
+    }
+
+    .account-pill {
+      border: none;
+      background: transparent;
+      padding: 6px 16px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-sans);
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.25s var(--ease-spring);
+    }
+
+    .account-pill.active {
+      background: var(--surface-card);
+      color: var(--text-primary);
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-action-pill {
+      height: 34px;
+      padding: 0 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-hairline);
+      background: var(--surface-card);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 12.5px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s var(--ease-spring);
+    }
+
+    .nav-action-pill:hover {
+      background: var(--accent-blue-soft);
+      color: var(--accent-blue);
+      border-color: transparent;
+    }
+
+    .nav-action-pill svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+    }
+
+    /* ======================================================================
+       3. COLLAPSIBLE THREE-PANE STAGE MANAGER WORKSPACE
+       ====================================================================== */
+    .stage-workspace {
+      display: flex;
+      gap: 18px;
+      max-width: 1720px;
+      margin: 0 auto;
+      padding: 18px 24px;
+      height: calc(100vh - 62px);
+      transition: all 0.45s var(--ease-spring);
+    }
+
+    .left-sidebar {
+      width: 326px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      transition: width 0.45s var(--ease-spring), opacity 0.3s var(--ease-spring), transform 0.45s var(--ease-spring), margin 0.45s var(--ease-spring);
+    }
+
+    .stage-workspace.collapse-left .left-sidebar {
+      width: 0;
+      opacity: 0;
+      transform: translateX(-28px);
+      margin-right: -18px;
+      pointer-events: none;
+    }
+
+    .center-stage {
+      flex: 1;
+      min-width: 0;
+      background: var(--surface-card);
+      border-radius: var(--radius-2xl);
+      border: 1px solid var(--border-card);
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      transition: all 0.45s var(--ease-spring);
+    }
+
+    .right-sidebar {
+      width: 336px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      transition: width 0.45s var(--ease-spring), opacity 0.3s var(--ease-spring), transform 0.45s var(--ease-spring), margin 0.45s var(--ease-spring);
+    }
+
+    .stage-workspace.collapse-right .right-sidebar {
+      width: 0;
+      opacity: 0;
+      transform: translateX(28px);
+      margin-left: -18px;
+      pointer-events: none;
+    }
+
+    @media (max-width: 1120px) {
+      html, body {
+        overflow: auto;
+      }
+      .stage-workspace {
+        flex-direction: column;
+        height: auto;
+      }
+      .left-sidebar, .right-sidebar {
+        width: 100% !important;
+        opacity: 1 !important;
+        transform: none !important;
+        margin: 0 !important;
+        pointer-events: auto !important;
+      }
+    }
+
+    /* ======================================================================
+       LEFT SIDEBAR: APPLE CARD HERO & SERVICE NAVIGATION
+       ====================================================================== */
+    .wealth-hero-card {
+      background: var(--surface-card);
+      border-radius: var(--radius-2xl);
+      padding: 22px;
+      border: 1px solid var(--border-card);
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-art-bg {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 180px;
+      height: 150px;
+      opacity: 0.32;
+      pointer-events: none;
+      object-fit: cover;
+      mask-image: radial-gradient(circle at top right, black 25%, transparent 75%);
+      -webkit-mask-image: radial-gradient(circle at top right, black 25%, transparent 75%);
+    }
+
+    .hero-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-greeting {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .hero-greeting strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .hero-tier-pill {
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-blue-soft);
+      color: var(--accent-blue);
+    }
+
+    .balance-label-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+      position: relative;
+      z-index: 2;
+    }
+
+    .eye-privacy-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      padding: 2px;
+      border-radius: 4px;
+    }
+
+    .eye-privacy-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .eye-privacy-btn svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+    }
+
+    .hero-balance {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      margin: 4px 0 14px 0;
+      font-variant-numeric: tabular-nums;
+      position: relative;
+      z-index: 2;
+      transition: filter 0.3s var(--ease-spring);
+    }
+
+    .hero-balance.masked, .meta-masked {
+      filter: blur(8px);
+      user-select: none;
+    }
+
+    .hero-metrics-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-hairline);
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-metric span {
+      display: block;
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .hero-metric strong {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-top: 2px;
+      font-variant-numeric: tabular-nums;
+      transition: filter 0.3s var(--ease-spring);
+    }
+
+    .hero-metric strong.up {
+      color: var(--accent-green);
+    }
+
+    /* Service Menu Card */
+    .service-nav-card {
+      background: var(--surface-card);
+      border-radius: var(--radius-2xl);
+      padding: 18px;
+      border: 1px solid var(--border-card);
+      box-shadow: var(--shadow-card);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-section-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      padding: 0 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .service-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .service-item {
+      width: 100%;
+      border: 1px solid transparent;
+      background: var(--surface-subtle);
+      border-radius: var(--radius-lg);
+      padding: 12px 14px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      transition: all 0.25s var(--ease-spring);
+    }
+
+    .service-item:hover {
+      background: var(--accent-blue-soft);
+      transform: translateY(-1px);
+    }
+
+    .service-item:active {
+      transform: scale(0.98);
+    }
+
+    .service-item.active {
+      background: var(--accent-blue-soft);
+      border-color: rgba(0, 113, 227, 0.25);
+    }
+
+    .s-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--surface-card);
+      color: var(--accent-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      transition: all 0.25s var(--ease-spring);
+    }
+
+    .service-item.active .s-icon {
+      background: var(--accent-blue);
+      color: #FFFFFF;
+    }
+
+    .s-icon svg {
+      width: 17px;
+      height: 17px;
+      stroke: currentColor;
+    }
+
+    .s-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .s-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      line-height: 1.35;
+    }
+
+    /* ======================================================================
+       CENTER STAGE: ADVISORY STREAM & INTERACTIVE FINANCIAL WIDGETS
+       ====================================================================== */
+    .stage-header {
+      padding: 15px 24px;
+      border-bottom: 1px solid var(--border-hairline);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .stage-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .stage-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .stage-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .quick-chips-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .mini-chip-btn {
+      border: 1px solid var(--border-hairline);
+      background: var(--surface-subtle);
+      color: var(--text-secondary);
+      font-family: var(--font-sans);
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 4px 11px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: all 0.2s var(--ease-spring);
+    }
+
+    .mini-chip-btn:hover {
+      background: var(--accent-blue-soft);
+      color: var(--accent-blue);
+      border-color: transparent;
+    }
+
+    .chat-stream {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      scroll-behavior: smooth;
+    }
+
+    .msg-user {
+      align-self: flex-end;
+      max-width: 76%;
+      background: var(--accent-blue);
+      color: #FFFFFF;
+      padding: 12px 18px;
+      border-radius: 20px 20px 4px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 4px 14px rgba(0, 113, 227, 0.2);
+      animation: fadeSlideUp 0.35s var(--ease-spring) forwards;
+    }
+
+    .msg-assistant {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      animation: fadeSlideUp 0.45s var(--ease-spring) forwards;
+    }
+
+    .assistant-lead {
+      font-size: 14.5px;
+      line-height: 1.7;
+      color: var(--text-primary);
+    }
+
+    .assistant-lead p + p {
+      margin-top: 8px;
+    }
+
+    .guard-callout {
+      margin-top: 10px;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      background: var(--accent-green-soft);
+      color: var(--accent-green);
+      font-size: 13px;
+      line-height: 1.55;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .guard-callout svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Interactive Bento Widget Container */
+    .bento-widget {
+      background: var(--surface-subtle);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-hairline);
+      padding: 20px;
+      transition: box-shadow 0.25s var(--ease-spring);
+    }
+
+    .bento-widget:hover {
+      box-shadow: var(--shadow-hover);
+    }
+
+    .w-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .w-title {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .w-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .seg-control {
+      display: inline-flex;
+      background: var(--pill-track);
+      padding: 2px;
+      border-radius: var(--radius-pill);
+    }
+
+    .seg-btn {
+      border: none;
+      background: transparent;
+      padding: 4px 11px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-sans);
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s var(--ease-spring);
+    }
+
+    .seg-btn.active {
+      background: var(--surface-card);
+      color: var(--text-primary);
+      font-weight: 600;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Interactive Market Index Cards + SVG Area Chart */
+    .market-cards-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .m-card {
+      background: var(--surface-card);
+      border-radius: var(--radius-lg);
+      padding: 14px 16px;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: all 0.22s var(--ease-spring);
+    }
+
+    .m-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .m-card.selected {
+      border-color: var(--accent-blue);
+      background: var(--surface-elevated);
+    }
+
+    .m-card-name {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .m-card-main {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-top: 6px;
+    }
+
+    .m-card-val {
+      font-size: 21px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .m-card-pill {
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-green-soft);
+      color: var(--accent-green);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .interactive-chart-box {
+      background: var(--surface-card);
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      border: 1px solid var(--border-card);
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .chart-meta-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .chart-hover-readout {
+      font-weight: 600;
+      color: var(--accent-blue);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .macro-row-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .macro-box {
+      background: var(--surface-card);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      border: 1px solid var(--border-card);
+    }
+
+    .macro-box span {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .macro-box strong {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-top: 2px;
+    }
+
+    /* Interactive 5-Dim Risk Radar + Live Sliders */
+    .risk-interactive-grid {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .radar-card {
+      background: var(--surface-card);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      border: 1px solid var(--border-card);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .dim-sliders-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .dim-slider-row {
+      display: grid;
+      grid-template-columns: 88px 1fr 48px;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .dim-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    /* Apple Style Range Slider */
+    .apple-range {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 7px;
+      border-radius: var(--radius-pill);
+      background: var(--pill-track);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .apple-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 2px solid var(--accent-blue);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+      cursor: pointer;
+      transition: transform 0.15s var(--ease-spring);
+    }
+
+    .apple-range::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    .dim-val-badge {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Interactive Portfolio Simulator Controls inside Allocation Widget */
+    .sim-control-panel {
+      background: var(--surface-card);
+      border-radius: var(--radius-lg);
+      padding: 14px 18px;
+      border: 1px solid var(--border-card);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .sim-slider-group {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .sim-slider-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12.5px;
+      margin-bottom: 6px;
+    }
+
+    .sim-slider-top strong {
+      color: var(--accent-blue);
+      font-size: 14px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .segmented-pill-bar {
+      height: 15px;
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      display: flex;
+      gap: 3px;
+      margin-bottom: 16px;
+    }
+
+    .seg-bar-piece {
+      height: 100%;
+      transition: width 0.4s var(--ease-spring);
+    }
+
+    .alloc-bento-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .alloc-bento-cell {
+      background: var(--surface-card);
+      border-radius: var(--radius-md);
+      padding: 13px;
+      border: 1px solid var(--border-card);
+      transition: transform 0.2s var(--ease-spring);
+    }
+
+    .alloc-bento-cell:hover {
+      transform: translateY(-2px);
+    }
+
+    .alloc-cell-head {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .dot-swatch {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .alloc-cell-pct {
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: 4px;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .alloc-cell-amt {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 1px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Interactive Product Table (Clickable Rows) */
+    .product-table-box {
+      background: var(--surface-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-card);
+      overflow: hidden;
+    }
+
+    .product-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .product-table th {
+      text-align: left;
+      padding: 11px 16px;
+      background: var(--surface-subtle);
+      border-bottom: 1px solid var(--border-hairline);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .product-table tbody tr {
+      cursor: pointer;
+      transition: background 0.18s ease;
+    }
+
+    .product-table tbody tr:hover {
+      background: var(--accent-blue-soft);
+    }
+
+    .product-table td {
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border-hairline);
+      color: var(--text-secondary);
+    }
+
+    .product-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .tier-tag {
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: var(--surface-subtle);
+      color: var(--text-primary);
+      border: 1px solid var(--border-hairline);
+    }
+
+    .detail-link-pill {
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-blue-soft);
+      color: var(--accent-blue);
+    }
+
+    /* ======================================================================
+       INTERACTIVE DATA VISUALIZATION SUITE (MONTE CARLO / STRESS / DUAL RING)
+       ====================================================================== */
+    .analytics-workbench {
+      background: var(--surface-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-card);
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+    }
+
+    .wb-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+      margin-bottom: 16px;
+    }
+
+    .wb-tab-group {
+      display: inline-flex;
+      background: var(--pill-track);
+      padding: 3px;
+      border-radius: var(--radius-pill);
+      flex-wrap: wrap;
+      gap: 2px;
+    }
+
+    .wb-tab-btn {
+      border: none;
+      background: transparent;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.25s var(--ease-spring);
+    }
+
+    .wb-tab-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .wb-tab-btn.active {
+      background: var(--surface-card);
+      color: var(--accent-blue);
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .wb-pane {
+      display: none;
+      animation: fadeSlideUp 0.35s var(--ease-spring) forwards;
+    }
+
+    .wb-pane.active {
+      display: block;
+    }
+
+    .wb-sub-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .wb-readout-banner {
+      background: var(--surface-subtle);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 12.5px;
+      font-variant-numeric: tabular-nums;
+      border: 1px solid var(--border-hairline);
+    }
+
+    .wb-legend-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .wb-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .wb-kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .wb-kpi-card {
+      background: var(--surface-subtle);
+      border-radius: var(--radius-md);
+      padding: 11px 14px;
+      border: 1px solid var(--border-hairline);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .wb-kpi-card span {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .wb-kpi-card strong {
+      display: block;
+      font-size: 15.5px;
+      font-weight: 700;
+      margin-top: 3px;
+      color: var(--text-primary);
+    }
+
+    .wb-kpi-card small {
+      display: block;
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* Stress Scenario Pills */
+    .stress-pill-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .stress-scen-btn {
+      background: var(--surface-subtle);
+      border: 1.5px solid transparent;
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.22s var(--ease-spring);
+      font-family: var(--font-sans);
+    }
+
+    .stress-scen-btn:hover {
+      background: var(--accent-blue-soft);
+      transform: translateY(-1px);
+    }
+
+    .stress-scen-btn.active {
+      background: var(--surface-card);
+      border-color: var(--accent-blue);
+      box-shadow: var(--shadow-card);
+    }
+
+    .stress-scen-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: block;
+    }
+
+    .stress-scen-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      display: block;
+    }
+
+    /* Dual-Ring Donut Comparison & Correlation Matrix */
+    .dual-ring-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .rings-stage {
+      background: var(--surface-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      border: 1px solid var(--border-hairline);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      gap: 12px;
+    }
+
+    .ring-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .ring-box-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-top: 8px;
+    }
+
+    .ring-box-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .delta-list-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .delta-row-item {
+      background: var(--surface-subtle);
+      border-radius: 10px;
+      padding: 9px 12px;
+      border: 1px solid var(--border-hairline);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s var(--ease-spring);
+    }
+
+    .delta-row-item:hover, .delta-row-item.highlight {
+      background: var(--accent-blue-soft);
+      border-color: rgba(0, 113, 227, 0.3);
+      transform: translateX(3px);
+    }
+
+    .corr-matrix-box {
+      margin-top: 12px;
+      background: var(--surface-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      border: 1px solid var(--border-hairline);
+    }
+
+    .corr-grid {
+      display: grid;
+      grid-template-columns: 90px repeat(4, 1fr);
+      gap: 5px;
+      font-size: 11px;
+      text-align: center;
+      align-items: center;
+      margin-top: 8px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .corr-cell {
+      padding: 6px 4px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .corr-cell:hover {
+      transform: scale(1.06);
+    }
+
+    /* Apple Confirmation Sheet */
+    .confirm-card {
+      background: var(--surface-card);
+      border-radius: var(--radius-xl);
+      border: 1.5px solid rgba(230, 126, 0, 0.32);
+      box-shadow: 0 8px 24px rgba(230, 126, 0, 0.07);
+      padding: 20px;
+    }
+
+    .confirm-pill {
+      display: inline-flex;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-amber-soft);
+      color: var(--accent-amber);
+      margin-bottom: 8px;
+    }
+
+    .confirm-heading {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .confirm-copy {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .confirm-btn-group {
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-apple {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.22s var(--ease-spring);
+    }
+
+    .btn-apple:active {
+      transform: scale(0.96);
+    }
+
+    .btn-apple.primary {
+      background: var(--accent-blue);
+      color: #FFFFFF;
+      box-shadow: 0 3px 10px rgba(0, 113, 227, 0.25);
+    }
+
+    .btn-apple.primary:hover {
+      background: var(--accent-blue-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-apple.secondary {
+      background: var(--surface-subtle);
+      color: var(--text-primary);
+      border-color: var(--border-hairline);
+    }
+
+    .btn-apple.secondary:hover {
+      background: var(--pill-track);
+    }
+
+    /* Bottom Composer Input */
+    .composer-bar {
+      padding: 14px 22px;
+      border-top: 1px solid var(--border-hairline);
+      background: var(--surface-card);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .composer-input {
+      flex: 1;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-pill);
+      padding: 11px 18px;
+      font-family: var(--font-sans);
+      font-size: 13.5px;
+      color: var(--text-primary);
+      outline: none;
+      transition: all 0.2s var(--ease-spring);
+    }
+
+    .composer-input:focus {
+      background: var(--surface-card);
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px var(--accent-blue-soft);
+    }
+
+    .composer-send {
+      background: var(--accent-blue);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 11px 22px;
+      font-family: var(--font-sans);
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s var(--ease-spring);
+    }
+
+    .composer-send:hover {
+      background: var(--accent-blue-hover);
+      transform: translateY(-1px);
+    }
+
+    /* ======================================================================
+       RIGHT SIDEBAR: COLLAPSIBLE PROGRESS & COMPLIANCE TRACKER
+       ====================================================================== */
+    .progress-drawer-card {
+      background: var(--surface-card);
+      border-radius: var(--radius-2xl);
+      padding: 20px;
+      border: 1px solid var(--border-card);
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .team-badge-card {
+      padding: 10px 6px;
+      border-radius: var(--radius-md);
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-hairline);
+      text-align: center;
+      transition: all 0.25s var(--ease-spring);
+    }
+
+    .team-badge-card.active {
+      background: var(--accent-blue-soft);
+      border-color: rgba(0, 113, 227, 0.28);
+      transform: translateY(-1px);
+    }
+
+    .team-badge-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .team-badge-card.active .team-badge-title {
+      color: var(--accent-blue);
+    }
+
+    .team-badge-sub {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .timeline-scroll {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-right: 4px;
+    }
+
+    .timeline-step {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      background: var(--surface-subtle);
+      border: 1px solid transparent;
+      animation: fadeSlideUp 0.35s var(--ease-spring) forwards;
+    }
+
+    .timeline-step.is-wait {
+      background: var(--accent-amber-soft);
+      border-color: rgba(230, 126, 0, 0.25);
+    }
+
+    .timeline-step.is-guard {
+      background: var(--accent-green-soft);
+      border-color: rgba(29, 158, 83, 0.25);
+    }
+
+    .t-step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent-blue-soft);
+      color: var(--accent-blue);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .timeline-step.is-wait .t-step-num {
+      background: var(--accent-amber);
+      color: #FFFFFF;
+    }
+
+    .timeline-step.is-guard .t-step-num {
+      background: var(--accent-green);
+      color: #FFFFFF;
+    }
+
+    .t-step-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .t-step-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+      line-height: 1.45;
+    }
+
+    .drawer-footer {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-hairline);
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    /* ======================================================================
+       4. APPLE SHEET MODAL (FUND PRODUCT DETAIL & SIMULATOR)
+       ====================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: var(--surface-overlay);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s var(--ease-spring);
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .apple-sheet-modal {
+      width: 92%;
+      max-width: 580px;
+      background: var(--surface-card);
+      border-radius: var(--radius-2xl);
+      border: 1px solid var(--border-card);
+      box-shadow: var(--shadow-modal);
+      padding: 26px;
+      transform: translateY(24px) scale(0.96);
+      transition: transform 0.38s var(--ease-spring);
+    }
+
+    .modal-backdrop.open .apple-sheet-modal {
+      transform: translateY(0) scale(1);
+    }
+
+    .sheet-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .sheet-close-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: none;
+      background: var(--pill-track);
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .sheet-close-btn:hover {
+      background: var(--accent-blue-soft);
+      color: var(--accent-blue);
+    }
+
+    .sheet-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .sheet-kpi-box {
+      background: var(--surface-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+    }
+
+    .sheet-kpi-box span {
+      display: block;
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .sheet-kpi-box strong {
+      display: block;
+      font-size: 18px;
+      font-weight: 700;
+      margin-top: 2px;
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+  <!-- Dynamic Island Toast -->
+  <div class="dynamic-toast" id="dynamicToast">
+    <i class="toast-dot"></i>
+    <span id="toastText">已更新您的专属配置方案</span>
+  </div>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-nav">
+    <div class="nav-left">
+      <button class="icon-toggle-btn active" id="toggleLeftBtn" onclick="toggleLeftSidebar()" title="收起/展开左侧资产导航栏 (快捷键 [)">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+          <line x1="9" y1="3" x2="9" y2="21"></line>
+        </svg>
+      </button>
+
+      <div class="brand-lockup">
+        <div class="brand-orb">
+          <img src="/assets/advisor_orb.png" alt="" onerror="this.style.display='none'" />
+        </div>
+        <div>
+          <span class="brand-title">澜景财富 · Lumina Wealth</span>
+          <span class="brand-subtitle">私人银行与智能资产配置</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-center">
+      <div class="account-switcher" role="group" aria-label="切换理财账户">
+        <button class="account-pill active" id="roleRetailBtn" onclick="switchInvestorRole('U_10086')">
+          林知远 · 稳健型账户
+        </button>
+        <button class="account-pill" id="roleHnwBtn" onclick="switchInvestorRole('U_88888')">
+          周明轩 · 尊享私人银行
+        </button>
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <button class="nav-action-pill" onclick="openSimulatorModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="21" x2="4" y2="14"></line>
+          <line x1="4" y1="10" x2="4" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12" y2="3"></line>
+          <line x1="20" y1="21" x2="20" y2="16"></line>
+          <line x1="20" y1="12" x2="20" y2="3"></line>
+          <line x1="1" y1="14" x2="7" y2="14"></line>
+          <line x1="9" y1="8" x2="15" y2="8"></line>
+          <line x1="17" y1="16" x2="23" y2="16"></line>
+        </svg>
+        <span>配置试算器</span>
+      </button>
+
+      <button class="icon-toggle-btn" id="focusModeBtn" onclick="toggleFocusMode()" title="专注全屏模式 (收起两侧边栏)">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <polyline points="9 21 3 21 3 15"></polyline>
+          <line x1="21" y1="3" x2="14" y2="10"></line>
+          <line x1="3" y1="21" x2="10" y2="14"></line>
+        </svg>
+      </button>
+
+      <button class="icon-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="切换浅色 / 深色外观">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+
+      <button class="icon-toggle-btn active" id="toggleRightBtn" onclick="toggleRightSidebar()" title="收起/展开右侧服务进度栏 (快捷键 ])">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+          <line x1="15" y1="3" x2="15" y2="21"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Three-Column Workspace -->
+  <div class="stage-workspace" id="stageWorkspace">
+    <!-- Left Sidebar: Account Overview & Services -->
+    <aside class="left-sidebar" id="leftSidebar">
+      <div class="wealth-hero-card">
+        <img src="/assets/wealth_card_art.png" alt="" class="hero-art-bg" onerror="this.style.display='none'" />
+        <div class="hero-top-row">
+          <span class="hero-greeting">您好，<strong id="clientNameLabel">林知远</strong></span>
+          <span class="hero-tier-pill" id="sidebarRiskVal">R2 稳健型</span>
+        </div>
+
+        <div class="balance-label-row">
+          <span>账户可配置总资产</span>
+          <button class="eye-privacy-btn" onclick="togglePrivacyMask()" title="隐藏/显示资产金额">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+        </div>
+
+        <div class="hero-balance" id="sidebarAssetVal">¥500,000.00</div>
+
+        <div class="hero-metrics-row">
+          <div class="hero-metric">
+            <span>持仓累计收益</span>
+            <strong class="up" id="sidebarProfitVal">+¥22,800.00 (+4.56%)</strong>
+          </div>
+          <div class="hero-metric">
+            <span>专属服务通道</span>
+            <strong id="sidebarChannelVal">智能实时直通</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="service-nav-card">
+        <div class="card-section-label">
+          <span>专属财富管理服务</span>
+          <span>点击体验</span>
+        </div>
+        <div class="service-stack">
+          <button class="service-item active" id="scen-market_qa" onclick="triggerScenario('market_qa', '最近大盘怎么样')">
+            <div class="s-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+                <polyline points="16 7 22 7 22 13"></polyline>
+              </svg>
+            </div>
+            <div>
+              <div class="s-title">今日市场行情解读</div>
+              <div class="s-desc">可交互多周期指数走势与宏观风向标</div>
+            </div>
+          </button>
+
+          <button class="service-item" id="scen-risk_assess" onclick="triggerScenario('risk_assess', '帮我做个风险评估')">
+            <div class="s-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="s-title">五维风险承受力测评</div>
+              <div class="s-desc">支持手动滑动微调五维偏好与实时雷达图</div>
+            </div>
+          </button>
+
+          <button class="service-item" id="scen-alloc_reject_loop" onclick="triggerScenario('alloc_reject_loop', '我有50万闲钱，稳健型，帮我做个资产配置')">
+            <div class="s-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="s-title">专属资产配置方案</div>
+              <div class="s-desc">含10年财富概率扇面图、极端压力沙盘与双环对比</div>
+            </div>
+          </button>
+
+          <button class="service-item" id="scen-report_flow" onclick="triggerScenario('report_flow', '分析一下我的持仓盈亏并生成投资报告')">
+            <div class="s-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+            </div>
+            <div>
+              <div class="s-title">持仓收益归因与调仓报告</div>
+              <div class="s-desc">调仓前后双环对比图、相关性矩阵与绩效归因</div>
+            </div>
+          </button>
+
+          <button class="service-item" id="scen-pipeline_full" onclick="triggerScenario('pipeline_full', '我是新客户，帮我从风险评估到50万资产配置全流程走一遍')">
+            <div class="s-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div>
+              <div class="s-title">新客测评与配置全流程</div>
+              <div class="s-desc">完成风险测评确认后无缝生成配置方案</div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER STAGE: CONVERSATIONAL & INTERACTIVE WEALTH WORKSPACE -->
+    <main class="center-stage">
+      <div class="stage-header">
+        <div class="stage-header-left">
+          <div>
+            <div class="stage-title">澜景私人财富顾问</div>
+            <div class="stage-subtitle">点击表内任一基金可查看净值详情与费率，拖动滑块可实时测算收益</div>
+          </div>
+        </div>
+        <div class="quick-chips-row">
+          <button class="mini-chip-btn" onclick="triggerScenario('alloc_reject_loop', '我有50万闲钱，稳健型，帮我做个资产配置')">10年扇面与压力沙盘</button>
+          <button class="mini-chip-btn" onclick="openSimulatorModal()">自定义金额试算</button>
+          <button class="mini-chip-btn" onclick="clearStream()">清空对话</button>
+        </div>
+      </div>
+
+      <div class="chat-stream" id="chatStream"></div>
+
+      <form class="composer-bar" onsubmit="handleCustomSubmit(event)">
+        <input
+          type="text"
+          id="queryInput"
+          class="composer-input"
+          placeholder="输入您的财富管理需求，例如：最近大盘怎么样 / 帮我做个风险测评 / 100万稳健型怎么配置..."
+          autocomplete="off"
+        />
+        <button type="submit" class="composer-send">发送</button>
+      </form>
+    </main>
+
+    <!-- RIGHT SIDEBAR: COLLAPSIBLE SERVICE PROGRESS TRACKER -->
+    <aside class="right-sidebar" id="rightSidebar">
+      <div class="progress-drawer-card">
+        <div class="card-section-label">
+          <span>多顾问协同服务进度</span>
+          <span id="stepCountBadge">实时同步</span>
+        </div>
+
+        <div class="team-grid">
+          <div class="team-badge-card" id="team-RiskAgent">
+            <div class="team-badge-title">风险评估顾问</div>
+            <div class="team-badge-sub">适当性评定</div>
+          </div>
+          <div class="team-badge-card" id="team-PortfolioAgent">
+            <div class="team-badge-title">资产配置顾问</div>
+            <div class="team-badge-sub">组合定制</div>
+          </div>
+          <div class="team-badge-card" id="team-ReportAgent">
+            <div class="team-badge-title">投后报告顾问</div>
+            <div class="team-badge-sub">绩效归因</div>
+          </div>
+        </div>
+
+        <div class="card-section-label">
+          <span>本次服务执行明细</span>
+        </div>
+
+        <div class="timeline-scroll" id="traceContainer"></div>
+
+        <div class="drawer-footer">
+          <span>适当性合规保障已开启</span>
+          <span>遵循《适当性管理办法》</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Product Detail & Simulator Modal -->
+  <div class="modal-backdrop" id="sheetModalBackdrop" onclick="closeSheetModal(event)">
+    <div class="apple-sheet-modal" id="sheetModalContent" onclick="event.stopPropagation()"></div>
+  </div>
+
+  <script>
+    const API_BASE = window.location.origin.startsWith("http")
+      ? window.location.origin
+      : "http://127.0.0.1:8001";
+    let currentUserId = "U_10086";
+    let currentThreadId = "T_20261104_01";
+    let backendAvailable = false;
+    let localSimPipelineAfterConfirm = false;
+    let isPrivacyMasked = false;
+
+    // Rich Product Metadata for Interactive Detail Sheet
+    const FUND_DETAIL_DB = {
+      "招商安泽纯债 A": {
+        code: "009812.OF",
+        category: "债券型基金",
+        risk: "R2 稳健型",
+        return3y: "+4.20%",
+        drawdown: "-1.80%",
+        sharpe: "1.45",
+        minBuy: "100元起购",
+        fee: "申购费 0.08% (一折) · 持有满30天免赎回费",
+        manager: "李梓涵（11年固收投研经验，专注高等级国债与央企金融债久期策略）",
+        points: [1.000, 1.012, 1.021, 1.019, 1.034, 1.048, 1.062, 1.078, 1.095, 1.112, 1.126]
+      },
+      "中欧红利智选平衡混合": {
+        code: "014288.OF",
+        category: "混合型基金",
+        risk: "R2 稳健型",
+        return3y: "+6.80%",
+        drawdown: "-4.90%",
+        sharpe: "1.18",
+        minBuy: "1,000元起购",
+        fee: "申购费 0.12% (一折) · 持有满180天免赎回费",
+        manager: "周成远（14年股债平衡管理经验，优选高股息央企红利与可转债增强）",
+        points: [1.000, 1.018, 1.009, 1.032, 1.055, 1.049, 1.084, 1.112, 1.145, 1.178, 1.204]
+      },
+      "天弘云商宝货币 A": {
+        code: "003501.OF",
+        category: "货币基金",
+        risk: "R1 谨慎型",
+        return3y: "+2.10%",
+        drawdown: "-0.05%",
+        sharpe: "2.10",
+        minBuy: "1元起购",
+        fee: "0 申购费 · 0 赎回费 · 支持 T+0 快速取现",
+        manager: "陈晓雯（专注银行同业存单与短期国债逆回购流动性管理）",
+        points: [1.000, 1.005, 1.011, 1.016, 1.022, 1.028, 1.034, 1.041, 1.048, 1.055, 1.063]
+      },
+      "招行90天看涨鲨鱼鳍结构性存款": {
+        code: "CMB-S90",
+        category: "结构性存款",
+        risk: "R1 谨慎型",
+        return3y: "+3.50%",
+        drawdown: "0.00%",
+        sharpe: "1.90",
+        minBuy: "10,000元起购",
+        fee: "本金纳入存款保险保障 · 90天封闭到期自动兑付",
+        manager: "招商银行金融市场部衍生品结构团队（挂钩沪深300指数区间增厚收益）",
+        points: [1.000, 1.008, 1.017, 1.025, 1.034, 1.043, 1.052, 1.061, 1.070, 1.079, 1.088]
+      },
+      "华夏科创板半导体锐进股票": {
+        code: "016999.OF",
+        category: "股票型基金",
+        risk: "R4 进取型",
+        return3y: "+14.50%",
+        drawdown: "-28.40%",
+        sharpe: "0.76",
+        minBuy: "1,000元起购",
+        fee: "申购费 0.15% · 仅限 R4 及以上进取型客户配置",
+        manager: "赵明宇（聚焦国产算力芯片与晶圆设备高成长赛道，波动较高）",
+        points: [1.000, 1.080, 0.940, 1.120, 1.010, 1.240, 1.110, 1.320, 1.210, 1.390, 1.450]
+      }
+    };
+
+    // Multi-timeframe market series for interactive chart
+    const MARKET_SERIES = {
+      "沪深300": {
+        "5D": { change: "+1.85%", dates: ["周一", "周二", "周三", "周四", "今日"], vals: [3896.2, 3918.5, 3909.8, 3942.1, 3968.42] },
+        "1M": { change: "+4.12%", dates: ["10/08", "10/15", "10/22", "10/29", "今日"], vals: [3811.4, 3845.0, 3889.6, 3920.3, 3968.42] },
+        "1Q": { change: "+9.65%", dates: ["8月", "9月", "10月上旬", "10月下旬", "今日"], vals: [3619.0, 3710.5, 3830.2, 3912.0, 3968.42] },
+        "1Y": { change: "+14.80%", dates: ["1季度", "2季度", "3季度", "10月", "今日"], vals: [3456.8, 3580.4, 3725.1, 3890.0, 3968.42] }
+      },
+      "上证指数": {
+        "5D": { change: "+1.42%", dates: ["周一", "周二", "周三", "周四", "今日"], vals: [3265.8, 3278.4, 3271.0, 3296.5, 3312.18] },
+        "1M": { change: "+3.45%", dates: ["10/08", "10/15", "10/22", "10/29", "今日"], vals: [3201.7, 3228.0, 3259.4, 3288.1, 3312.18] },
+        "1Q": { change: "+8.20%", dates: ["8月", "9月", "10月上旬", "10月下旬", "今日"], vals: [3061.1, 3120.5, 3210.8, 3275.0, 3312.18] },
+        "1Y": { change: "+11.90%", dates: ["1季度", "2季度", "3季度", "10月", "今日"], vals: [2960.0, 3045.2, 3150.6, 3250.0, 3312.18] }
+      },
+      "中证全债": {
+        "5D": { change: "+0.22%", dates: ["周一", "周二", "周三", "周四", "今日"], vals: [248.10, 248.24, 248.35, 248.51, 248.65] },
+        "1M": { change: "+0.68%", dates: ["10/08", "10/15", "10/22", "10/29", "今日"], vals: [246.97, 247.35, 247.82, 248.29, 248.65] },
+        "1Q": { change: "+1.54%", dates: ["8月", "9月", "10月上旬", "10月下旬", "今日"], vals: [244.88, 245.90, 246.85, 247.90, 248.65] },
+        "1Y": { change: "+4.65%", dates: ["1季度", "2季度", "3季度", "10月", "今日"], vals: [237.60, 240.40, 243.80, 246.90, 248.65] }
+      }
+    };
+
+    function showToast(msg) {
+      const t = document.getElementById("dynamicToast");
+      document.getElementById("toastText").textContent = msg;
+      t.classList.add("show");
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
+    }
+
+    /* Sidebar & Appearance Interactive Controls */
+    function toggleLeftSidebar() {
+      const ws = document.getElementById("stageWorkspace");
+      const btn = document.getElementById("toggleLeftBtn");
+      ws.classList.toggle("collapse-left");
+      btn.classList.toggle("active", !ws.classList.contains("collapse-left"));
+    }
+
+    function toggleRightSidebar() {
+      const ws = document.getElementById("stageWorkspace");
+      const btn = document.getElementById("toggleRightBtn");
+      ws.classList.toggle("collapse-right");
+      btn.classList.toggle("active", !ws.classList.contains("collapse-right"));
+    }
+
+    function toggleFocusMode() {
+      const ws = document.getElementById("stageWorkspace");
+      const focusBtn = document.getElementById("focusModeBtn");
+      const bothCollapsed = ws.classList.contains("collapse-left") && ws.classList.contains("collapse-right");
+      if (bothCollapsed) {
+        ws.classList.remove("collapse-left", "collapse-right");
+        document.getElementById("toggleLeftBtn").classList.add("active");
+        document.getElementById("toggleRightBtn").classList.add("active");
+        focusBtn.classList.remove("active");
+        showToast("已恢复标准三栏视图");
+      } else {
+        ws.classList.add("collapse-left", "collapse-right");
+        document.getElementById("toggleLeftBtn").classList.remove("active");
+        document.getElementById("toggleRightBtn").classList.remove("active");
+        focusBtn.classList.add("active");
+        showToast("已开启专注全屏模式 (按 ESC 或再次点击可恢复)");
+      }
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      html.setAttribute("data-theme", next);
+      document.getElementById("themeToggleBtn").classList.toggle("active", next === "dark");
+      showToast(next === "dark" ? "已切换至深色外观" : "已切换至浅色外观");
+    }
+
+    function togglePrivacyMask() {
+      isPrivacyMasked = !isPrivacyMasked;
+      document.getElementById("sidebarAssetVal").classList.toggle("masked", isPrivacyMasked);
+      document.getElementById("sidebarProfitVal").classList.toggle("meta-masked", isPrivacyMasked);
+      showToast(isPrivacyMasked ? "已开启金额隐私保护" : "已恢复金额显示");
+    }
+
+    function clearStream() {
+      document.getElementById("chatStream").innerHTML = "";
+      triggerScenario("market_qa", "最近大盘怎么样");
+      showToast("对话已重置");
+    }
+
+    // Keyboard shortcuts: '[' for left sidebar, ']' for right sidebar, 'Escape' to close modal
+    window.addEventListener("keydown", e => {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+      if (e.key === "[") toggleLeftSidebar();
+      if (e.key === "]") toggleRightSidebar();
+      if (e.key === "Escape") closeSheetModal();
+    });
+
+    async function checkBackend() {
+      try {
+        const resp = await fetch(`${API_BASE}/api/state?thread_id=${currentThreadId}&user_id=${currentUserId}`);
+        if (resp.ok) backendAvailable = true;
+      } catch (e) {
+        backendAvailable = false;
+      }
+    }
+
+    function switchInvestorRole(userId) {
+      currentUserId = userId;
+      currentThreadId = userId === "U_88888" ? "T_20261104_HNW" : "T_20261104_01";
+      document.getElementById("roleRetailBtn").classList.toggle("active", userId === "U_10086");
+      document.getElementById("roleHnwBtn").classList.toggle("active", userId === "U_88888");
+
+      const isHnw = userId === "U_88888";
+      document.getElementById("clientNameLabel").textContent = isHnw ? "周明轩" : "林知远";
+      document.getElementById("sidebarAssetVal").textContent = isHnw ? "¥6,500,000.00" : "¥500,000.00";
+      document.getElementById("sidebarRiskVal").textContent = isHnw ? "R3 平衡型 · 尊享" : "R2 稳健型";
+      document.getElementById("sidebarProfitVal").textContent = isHnw ? "+¥275,000.00 (+4.23%)" : "+¥22,800.00 (+4.56%)";
+      document.getElementById("sidebarChannelVal").textContent = isHnw ? "专属理财师复核" : "智能实时直通";
+      showToast(isHnw ? "已切换至 周明轩 · 尊享私人银行账户" : "已切换至 林知远 · 稳健型理财账户");
+    }
+
+    function toClientFriendlyStep(step) {
+      const code = step.node_id || "";
+      const map = {
+        ORCH: { title: "理解您的财富需求", desc: "智能识别您的咨询方向并匹配专属理财顾问团队。" },
+        R1: { title: "核对账户与财务状况", desc: "同步您的实名认证信息、可投资资产与收支结构。" },
+        R2: { title: "评估家庭现金流安全垫", desc: "核算自由现金流与负债比例，确保中长期投资稳健。" },
+        R3: { title: "五维风险偏好分析", desc: "综合评估收入稳定性、投资经验、风险承受度、流动性与投资期限。" },
+        R4: { title: "测算风险承受能力等级", desc: "按监管标准加权算出综合得分并评定您的适当性等级。" },
+        R5: { title: "投资者适当性准入核验", desc: "核对《证券期货投资者适当性管理办法》合规要求。" },
+        R6: { title: "测评信息完整性复核", desc: "确认各项财务指标与投资期限逻辑一致、完整有效。" },
+        R7: { title: "生成个人风险评估报告", desc: "为您出具正式的风险承受能力评估结论与配置建议。" },
+        R8: { title: "等待您本人确认测评结果", desc: "按监管规定，测评等级需经您本人确认后正式生效。" },
+        R9: { title: "风险测评档案正式生效", desc: "您的风险等级已更新生效，并自动开启后续专属配置服务。" },
+        P1: { title: "同步您的风险偏好档案", desc: "读取您当前生效的风险承受能力等级与可配置资金规模。" },
+        P2: { title: "实时市场与宏观环境研判", desc: "综合分析沪深300、债券收益率及最新宏观经济指标。" },
+        P3: { title: "严选匹配风险等级的基金产品", desc: "从全市场优选库中筛选符合您风险承受等级的低回撤稳健标的。" },
+        P4: { title: "测算科学资产配置比例", desc: "精准核算债券、混合、货币及结构性存款的黄金配比（总和 100%）。" },
+        P5: { title: "组合预期收益与回撤测算", desc: "评估组合历史年化回报区间、最大回撤控制与夏普比率。" },
+        P6: { title: "构建专属投资组合清单", desc: "为您匹配各资产类别下的优选代表产品。" },
+        P7: step.branch_loop
+          ? { title: "适当性安心复核（已自动剔除超标产品）", desc: "检出初选池中含高波动产品，已自动为您重新筛选并替换为稳健型合规标的。" }
+          : { title: "适当性安心保障复核通过", desc: "确认组合内全部产品风险等级均100%符合您的风险承受能力。" },
+        P8: { title: "生成专属资产配置方案", desc: "为您呈现完整的资产配置比例、严选基金清单与风险提示。" },
+        RP1: { title: "同步存续持仓明细", desc: "读取您当前持有的基金与理财产品份额及成本数据。" },
+        RP2: { title: "核算持仓累计收益与回撤", desc: "精准计算组合最新市值、累计净收益与历史最大回撤。" },
+        RP3: { title: "对比同期市场基准表现", desc: "与同期沪深300指数对比，核算您的组合超额收益 Alpha。" },
+        RP4: { title: "持仓盈亏来源归因分析", desc: "拆解各类资产对组合整体收益的贡献度。" },
+        RP5: { title: "制定组合优化与调仓建议", desc: "结合最新市场趋势，为您提供分批止盈与再平衡建议。" },
+        RP6: { title: "专属持牌理财师人工复核", desc: "尊享高净值专户报告正由您的专属持牌理财师进行审阅把关。" },
+        RP7: { title: "投资报告正式生成送达", desc: "您的专属持仓归因分析与调仓建议报告已生成完毕。" }
+      };
+      return map[code] || { title: step.node_name, desc: step.detail };
+    }
+
+    function renderClientProgress(data) {
+      ["RiskAgent", "PortfolioAgent", "ReportAgent"].forEach(ag => {
+        const el = document.getElementById(`team-${ag}`);
+        if (el) el.classList.remove("active");
+      });
+
+      const trace = data.trace || [];
+      document.getElementById("stepCountBadge").textContent = `已完成 ${trace.length} 步`;
+      const container = document.getElementById("traceContainer");
+      container.innerHTML = "";
+
+      trace.forEach((step, idx) => {
+        if (step.agent && step.agent !== "Orchestrator") {
+          const teamEl = document.getElementById(`team-${step.agent}`);
+          if (teamEl) teamEl.classList.add("active");
+        }
+
+        const friendly = toClientFriendlyStep(step);
+        const item = document.createElement("div");
+        item.className = "timeline-step" +
+          (step.is_interrupt ? " is-wait" : "") +
+          (step.branch_loop ? " is-guard" : "");
+        item.style.animationDelay = `${idx * 45}ms`;
+
+        item.innerHTML = `
+          <div class="t-step-num">${idx + 1}</div>
+          <div>
+            <div class="t-step-title">${friendly.title}</div>
+            <div class="t-step-desc">${friendly.desc}</div>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    /* Interactive Market Chart Generator */
+    function renderInteractiveMarketChart(widgetId, indexName, periodKey) {
+      const seriesObj = (MARKET_SERIES[indexName] || MARKET_SERIES["沪深300"])[periodKey || "5D"];
+      const vals = seriesObj.vals;
+      const dates = seriesObj.dates;
+      const minV = Math.min(...vals);
+      const maxV = Math.max(...vals);
+      const span = (maxV - minV) || 1;
+      const w = 560, h = 120, padX = 24, padY = 18;
+
+      const coords = vals.map((v, i) => {
+        const x = padX + (i / (vals.length - 1)) * (w - padX * 2);
+        const y = h - padY - ((v - minV) / span) * (h - padY * 2);
+        return { x, y, v, d: dates[i] };
+      });
+
+      const linePts = coords.map(c => `${c.x},${c.y}`).join(" ");
+      const areaPts = `${coords[0].x},${h - padY} ${linePts} ${coords[coords.length - 1].x},${h - padY}`;
+
+      const circles = coords.map((c, idx) => `
+        <g class="chart-pt-group" style="cursor:pointer;" onmouseenter="updateChartReadout('${widgetId}', '${indexName}', '${c.d}', '${c.v}', '${seriesObj.change}')">
+          <circle cx="${c.x}" cy="${c.y}" r="14" fill="transparent" />
+          <circle cx="${c.x}" cy="${c.y}" r="4" fill="#0071E3" stroke="#FFFFFF" stroke-width="2" />
+          <text x="${c.x}" y="${h - 2}" text-anchor="middle" fill="var(--text-muted)" font-size="10.5">${c.d}</text>
+        </g>
+      `).join("");
+
+      const chartContainer = document.getElementById(`chart-svg-${widgetId}`);
+      if (chartContainer) {
+        chartContainer.innerHTML = `
+          <svg viewBox="0 0 ${w} ${h}" width="100%" height="125" style="overflow:visible;">
+            <defs>
+              <linearGradient id="grad-${widgetId}" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0071E3" stop-opacity="0.24" />
+                <stop offset="100%" stop-color="#0071E3" stop-opacity="0.0" />
+              </linearGradient>
+            </defs>
+            <polygon points="${areaPts}" fill="url(#grad-${widgetId})" />
+            <polyline points="${linePts}" fill="none" stroke="#0071E3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray:900;animation:chartDraw 0.8s var(--ease-spring) forwards;" />
+            ${circles}
+          </svg>
+        `;
+      }
+      updateChartReadout(widgetId, indexName, dates[dates.length - 1], vals[vals.length - 1], seriesObj.change);
+    }
+
+    window.updateChartReadout = function(widgetId, idxName, dateLabel, val, changeStr) {
+      const el = document.getElementById(`readout-${widgetId}`);
+      if (el) {
+        el.textContent = `${idxName} · ${dateLabel} 点位：${val}（区间涨跌 ${changeStr}）`;
+      }
+    };
+
+    window.switchMarketChartState = function(widgetId, newIndex, newPeriod) {
+      const wrap = document.getElementById(widgetId);
+      if (!wrap) return;
+      const curIdx = newIndex || wrap.getAttribute("data-idx") || "沪深300";
+      const curPer = newPeriod || wrap.getAttribute("data-period") || "5D";
+      wrap.setAttribute("data-idx", curIdx);
+      wrap.setAttribute("data-period", curPer);
+
+      wrap.querySelectorAll(".m-card").forEach(c => {
+        c.classList.toggle("selected", c.getAttribute("data-idx-name") === curIdx);
+      });
+      wrap.querySelectorAll(".seg-btn").forEach(b => {
+        b.classList.toggle("active", b.getAttribute("data-per") === curPer);
+      });
+
+      renderInteractiveMarketChart(widgetId, curIdx, curPer);
+    };
+
+    /* Smooth 5-Axis Radar SVG & Interactive Sliders */
+    function buildSmoothRadarSvg(dims) {
+      const keys = ["收入稳定性", "投资经验", "亏损容忍度", "流动性需求", "投资期限"];
+      const cx = 84, cy = 84, maxR = 62;
+      const angleStep = (Math.PI * 2) / 5;
+
+      function pt(i, ratio) {
+        const a = -Math.PI / 2 + i * angleStep;
+        return [cx + Math.cos(a) * maxR * ratio, cy + Math.sin(a) * maxR * ratio];
+      }
+
+      let rings = "";
+      [0.35, 0.7, 1.0].forEach(r => {
+        const pts = keys.map((_, i) => pt(i, r).join(",")).join(" ");
+        rings += `<polygon points="${pts}" fill="none" stroke="var(--border-hairline)" stroke-width="1" />`;
+      });
+
+      let axes = "";
+      keys.forEach((_, i) => {
+        const [x, y] = pt(i, 1.0);
+        axes += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--border-hairline)" stroke-width="1" />`;
+      });
+
+      const valPts = keys.map((k, i) => pt(i, (dims[k] || 5) / 10).join(",")).join(" ");
+      const dots = keys.map((k, i) => {
+        const [x, y] = pt(i, (dims[k] || 5) / 10);
+        return `<circle cx="${x}" cy="${y}" r="4" fill="#0071E3" stroke="#FFFFFF" stroke-width="1.5" />`;
+      }).join("");
+
+      return `
+        <svg width="168" height="168" viewBox="0 0 168 168">
+          ${rings}
+          ${axes}
+          <polygon points="${valPts}" fill="rgba(0, 113, 227, 0.18)" stroke="#0071E3" stroke-width="2.2" style="transition:all 0.25s ease;" />
+          ${dots}
+        </svg>
+      `;
+    }
+
+    window.onRiskSliderInput = function(widgetId) {
+      const wrap = document.getElementById(widgetId);
+      if (!wrap) return;
+      const dims = {};
+      wrap.querySelectorAll(".apple-range[data-dim]").forEach(inp => {
+        const k = inp.getAttribute("data-dim");
+        const v = parseInt(inp.value, 10);
+        dims[k] = v;
+        const valSpan = wrap.querySelector(`[data-dim-val="${k}"]`);
+        if (valSpan) valSpan.textContent = `${v} / 10`;
+      });
+
+      const score = Number((
+        dims["收入稳定性"] * 2.0 +
+        dims["投资经验"] * 1.5 +
+        dims["亏损容忍度"] * 3.0 +
+        dims["流动性需求"] * 1.5 +
+        dims["投资期限"] * 2.0
+      ).toFixed(1));
+
+      let tier = "R2-稳健型";
+      if (dims["亏损容忍度"] <= 2 || score < 35) tier = "R1-谨慎型";
+      else if (score < 65) tier = "R2-稳健型";
+      else if (score < 78) tier = "R3-平衡型";
+      else if (score < 88) tier = "R4-进取型";
+      else tier = "R5-激进型";
+
+      const radarHolder = document.getElementById(`radar-holder-${widgetId}`);
+      if (radarHolder) radarHolder.innerHTML = buildSmoothRadarSvg(dims);
+
+      const pillEl = document.getElementById(`risk-pill-${widgetId}`);
+      if (pillEl) pillEl.textContent = `综合评分 ${score} 分 · ${tier}`;
+    };
+
+    /* ====================================================================
+       INTERACTIVE DATA VISUALIZATION SUITE:
+       1) 未来10年财富概率扇面图 (Monte Carlo Fan Chart)
+       2) 历史极端行情压力测试沙盘 (Historical Black Swan Stress Sandbox)
+       3) 调仓前后双环对比图 + 相关性对冲矩阵 (Dual-Ring Rebalance & Correlation)
+       ==================================================================== */
+    const STRESS_SCENARIO_DB = {
+      crash_2020: {
+        title: "2020 全球流动性冲击",
+        sub: "股票急跌 · 纯债避险",
+        benchName: "单一沪深300基准",
+        stages: ["冲击前", "恐慌初期(T+15d)", "流动性低谷(T+35d)", "政策托底(T+75d)", "震荡修复(T+120d)", "期末(T+180d)"],
+        luminaSeries: [0.0, -0.9, -2.1, -0.5, +1.1, +2.4],
+        benchSeries: [0.0, -7.8, -16.2, -11.5, -6.4, -2.8],
+        luminaMaxDd: -2.1,
+        benchMaxDd: -16.2,
+        luminaRecoveryDays: 34,
+        benchRecoveryDays: 195,
+        insight: "当全球风险资产遭遇流动性抛售时，组合内 50% 高等级纯债与 10% 结构性存款受利率下行驱动产生资本利得，将最大回撤严格锁定在 -2.1% 以内。"
+      },
+      hike_2022: {
+        title: "2022 美联储激进加息",
+        sub: "高估值回调 · 红利抗跌",
+        benchName: "偏股成长基金基准",
+        stages: ["加息前", "估值压缩(T+30d)", "加息峰值(T+60d)", "情绪筑底(T+90d)", "红利领涨(T+135d)", "期末(T+180d)"],
+        luminaSeries: [0.0, -1.1, -2.6, -3.2, -0.8, +1.6],
+        benchSeries: [0.0, -8.4, -15.9, -21.6, -17.2, -13.5],
+        luminaMaxDd: -3.2,
+        benchMaxDd: -21.6,
+        luminaRecoveryDays: 52,
+        benchRecoveryDays: 260,
+        insight: "在全球加息周期中，25% 央企高股息红利混合基金凭借充沛自由现金流与低估值优势展现出极强韧性，配合短久期纯债大幅跑赢偏股成长基准 15.1%。"
+      },
+      bull_2024: {
+        title: "2024 利率下行与红利慢牛",
+        sub: "股债双牛 · 稳健增厚",
+        benchName: "同期沪深300指数",
+        stages: ["期初", "降准落地(T+30d)", "债牛延续(T+60d)", "红利重估(T+90d)", "稳步上行(T+135d)", "期末(T+180d)"],
+        luminaSeries: [0.0, +1.2, +2.4, +3.6, +5.1, +6.4],
+        benchSeries: [0.0, +0.8, -1.9, +1.5, +2.9, +4.1],
+        luminaMaxDd: -0.9,
+        benchMaxDd: -3.6,
+        luminaRecoveryDays: 12,
+        benchRecoveryDays: 48,
+        insight: "国内无风险利率下行周期中，纯债久期收益与高股息央企红利形成「股债双牛」共振，以不到 1% 的极低回撤实现 +6.4% 区间收益。"
+      },
+      infl_shock: {
+        title: "利率上行与债市震荡测试",
+        sub: "短钱防御 · 顺周期对冲",
+        benchName: "单一长久期纯债基准",
+        stages: ["冲击前", "预期升温(T+20d)", "长债回调(T+45d)", "票息缓冲(T+90d)", "重回升势(T+135d)", "期末(T+180d)"],
+        luminaSeries: [0.0, +0.2, -0.8, -1.5, +1.3, +3.5],
+        benchSeries: [0.0, -0.9, -2.4, -3.4, -2.1, -1.2],
+        luminaMaxDd: -1.5,
+        benchMaxDd: -3.4,
+        luminaRecoveryDays: 26,
+        benchRecoveryDays: 115,
+        insight: "即便遭遇债市阶段性利率上行冲击，15% 货币同业存单与 25% 顺周期红利混合亦能迅速对冲久期波动，26 天即可完成净值修复。"
+      }
+    };
+
+    function buildAnalyticsWorkbenchHtml(wId, initWan, defaultTab) {
+      const activeTab = defaultTab || "fan";
+      const stressButtonsHtml = Object.entries(STRESS_SCENARIO_DB).map(([k, sc], idx) => `
+        <button type="button" class="stress-scen-btn ${idx === 0 ? "active" : ""}" data-stress-key="${k}" onclick="selectStressScenario('${wId}', '${k}')">
+          <span class="stress-scen-title">${sc.title}</span>
+          <span class="stress-scen-sub">${sc.sub}</span>
+        </button>
+      `).join("");
+
+      return `
+        <div class="analytics-workbench" id="wb-${wId}" data-amt-wan="${initWan}" data-dca="0" data-cpi="0" data-stress="crash_2020" data-tab="${activeTab}">
+          <div class="wb-top-bar">
+            <div>
+              <div style="font-size:13.5px;font-weight:600;color:var(--text-primary);">深度数据可视化分析台</div>
+              <div style="font-size:11.5px;color:var(--text-muted);">支持10年概率扇面推演、历史黑天鹅压力沙盘与调仓前后双环对比</div>
+            </div>
+            <div class="wb-tab-group">
+              <button type="button" class="wb-tab-btn ${activeTab === "fan" ? "active" : ""}" data-wb-tab="fan" onclick="switchWorkbenchTab('${wId}', 'fan')">未来10年财富扇面图</button>
+              <button type="button" class="wb-tab-btn ${activeTab === "stress" ? "active" : ""}" data-wb-tab="stress" onclick="switchWorkbenchTab('${wId}', 'stress')">历史极端行情压力沙盘</button>
+              <button type="button" class="wb-tab-btn ${activeTab === "ring" ? "active" : ""}" data-wb-tab="ring" onclick="switchWorkbenchTab('${wId}', 'ring')">调仓前后双环对比图</button>
+              <button type="button" class="wb-tab-btn ${activeTab === "all" ? "active" : ""}" data-wb-tab="all" onclick="switchWorkbenchTab('${wId}', 'all')">三图全景同屏</button>
+            </div>
+          </div>
+
+          <!-- PANE 1: MONTE CARLO 10-YEAR WEALTH PROJECTION CONE -->
+          <div class="wb-pane ${activeTab === "fan" || activeTab === "all" ? "active" : ""}" id="pane-fan-${wId}">
+            <div class="wb-sub-toolbar">
+              <div class="wb-legend-row">
+                <span class="wb-legend-item"><i class="dot-swatch" style="background:#1D9E53;"></i>乐观情景 (90%分位)</span>
+                <span class="wb-legend-item"><i class="dot-swatch" style="background:#0071E3;"></i>中位基准预期 (50%分位)</span>
+                <span class="wb-legend-item"><i class="dot-swatch" style="background:#5856D6;"></i>保守底线 (10%分位)</span>
+                <span class="wb-legend-item"><i class="dot-swatch" style="background:#8E8E93;"></i>累计投入本金</span>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <div class="seg-control">
+                  <button type="button" class="seg-btn active" data-dca-val="0" onclick="setFanDca('${wId}', 0)">一次性投入</button>
+                  <button type="button" class="seg-btn" data-dca-val="0.5" onclick="setFanDca('${wId}', 0.5)">月定投 +¥5,000</button>
+                  <button type="button" class="seg-btn" data-dca-val="1.5" onclick="setFanDca('${wId}', 1.5)">月定投 +¥15,000</button>
+                </div>
+                <div class="seg-control">
+                  <button type="button" class="seg-btn active" data-cpi-val="0" onclick="setFanCpiMode('${wId}', 0)">名义复利终值</button>
+                  <button type="button" class="seg-btn" data-cpi-val="1" onclick="setFanCpiMode('${wId}', 1)">扣除通胀购买力</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="wb-readout-banner" id="fan-readout-${wId}">
+              <span>鼠标悬停下方年份节点，可实时查看各年度 90% 乐观上界、50% 中位预期与 10% 保守底线</span>
+              <strong style="color:var(--accent-blue);">蒙特卡洛 1,000 次路径模拟</strong>
+            </div>
+
+            <div id="fan-svg-holder-${wId}" style="width:100%;overflow:hidden;"></div>
+            <div class="wb-kpi-strip" id="fan-kpi-strip-${wId}"></div>
+          </div>
+
+          <!-- PANE 2: HISTORICAL BLACK SWAN STRESS TEST SANDBOX -->
+          <div class="wb-pane ${activeTab === "stress" || activeTab === "all" ? "active" : ""}" id="pane-stress-${wId}" style="${activeTab === "all" ? "margin-top:22px;padding-top:18px;border-top:1px solid var(--border-hairline);" : ""}">
+            <div style="font-size:12.5px;font-weight:600;color:var(--text-primary);margin-bottom:8px;">
+              点击切换历史极端行情剧本（实时对比「澜景多元组合」与「单一市场基准」抗跌表现）：
+            </div>
+            <div class="stress-pill-grid">${stressButtonsHtml}</div>
+
+            <div class="wb-readout-banner" id="stress-readout-${wId}"></div>
+            <div id="stress-svg-holder-${wId}" style="width:100%;overflow:hidden;"></div>
+            <div class="wb-kpi-strip" id="stress-kpi-strip-${wId}"></div>
+          </div>
+
+          <!-- PANE 3: DUAL-RING BEFORE/AFTER REBALANCE & CORRELATION MATRIX -->
+          <div class="wb-pane ${activeTab === "ring" || activeTab === "all" ? "active" : ""}" id="pane-ring-${wId}" style="${activeTab === "all" ? "margin-top:22px;padding-top:18px;border-top:1px solid var(--border-hairline);" : ""}">
+            <div class="wb-readout-banner" id="ring-readout-${wId}">
+              <span>悬停或点击右侧任一资产调仓条目，可高亮双环对应扇区并查看调仓逻辑</span>
+              <strong style="color:var(--accent-green);">夏普比率由 0.76 提升至 1.42 (+86.8%)</strong>
+            </div>
+            <div id="ring-holder-${wId}"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    window.switchWorkbenchTab = function(wId, tabName) {
+      const wb = document.getElementById(`wb-${wId}`);
+      if (!wb) return;
+      wb.setAttribute("data-tab", tabName);
+
+      wb.querySelectorAll(".wb-tab-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("data-wb-tab") === tabName);
+      });
+
+      const fanPane = document.getElementById(`pane-fan-${wId}`);
+      const stressPane = document.getElementById(`pane-stress-${wId}`);
+      const ringPane = document.getElementById(`pane-ring-${wId}`);
+
+      if (tabName === "all") {
+        fanPane.classList.add("active");
+        stressPane.classList.add("active");
+        ringPane.classList.add("active");
+        stressPane.style.marginTop = "22px";
+        stressPane.style.paddingTop = "18px";
+        stressPane.style.borderTop = "1px solid var(--border-hairline)";
+        ringPane.style.marginTop = "22px";
+        ringPane.style.paddingTop = "18px";
+        ringPane.style.borderTop = "1px solid var(--border-hairline)";
+      } else {
+        fanPane.classList.toggle("active", tabName === "fan");
+        stressPane.classList.toggle("active", tabName === "stress");
+        ringPane.classList.toggle("active", tabName === "ring");
+        stressPane.style.marginTop = "";
+        stressPane.style.paddingTop = "";
+        stressPane.style.borderTop = "";
+        ringPane.style.marginTop = "";
+        ringPane.style.paddingTop = "";
+        ringPane.style.borderTop = "";
+      }
+    };
+
+    window.setFanDca = function(wId, dcaWanPerMonth) {
+      const wb = document.getElementById(`wb-${wId}`);
+      if (!wb) return;
+      wb.setAttribute("data-dca", String(dcaWanPerMonth));
+      wb.querySelectorAll("[data-dca-val]").forEach(b => {
+        b.classList.toggle("active", parseFloat(b.getAttribute("data-dca-val")) === dcaWanPerMonth);
+      });
+      renderMonteCarloFanChart(wId);
+    };
+
+    window.setFanCpiMode = function(wId, cpiFlag) {
+      const wb = document.getElementById(`wb-${wId}`);
+      if (!wb) return;
+      wb.setAttribute("data-cpi", String(cpiFlag));
+      wb.querySelectorAll("[data-cpi-val]").forEach(b => {
+        b.classList.toggle("active", parseInt(b.getAttribute("data-cpi-val"), 10) === cpiFlag);
+      });
+      renderMonteCarloFanChart(wId);
+    };
+
+    window.renderMonteCarloFanChart = function(wId) {
+      const wb = document.getElementById(`wb-${wId}`);
+      if (!wb) return;
+      const amtWan = parseFloat(wb.getAttribute("data-amt-wan")) || 50;
+      const dcaWanMonthly = parseFloat(wb.getAttribute("data-dca")) || 0;
+      const cpiDiscount = parseInt(wb.getAttribute("data-cpi"), 10) === 1 ? 0.02 : 0.0;
+
+      const rOpt = Math.max(0.015, 0.072 - cpiDiscount);
+      const rMed = Math.max(0.01, 0.049 - cpiDiscount);
+      const rCon = Math.max(0.005, 0.031 - cpiDiscount);
+      const annualContribWan = dcaWanMonthly * 12;
+
+      const years = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      const series = years.map(yr => {
+        const prin = amtWan + annualContribWan * yr;
+        const calcFV = r => amtWan * Math.pow(1 + r, yr) + (annualContribWan > 0 ? annualContribWan * ((Math.pow(1 + r, yr) - 1) / r) : 0);
+        return {
+          yr,
+          prin: Number(prin.toFixed(1)),
+          con: Number(calcFV(rCon).toFixed(1)),
+          med: Number(calcFV(rMed).toFixed(1)),
+          opt: Number(calcFV(rOpt).toFixed(1))
+        };
+      });
+
+      const minVal = amtWan * 0.92;
+      const maxVal = series[10].opt * 1.05;
+      const span = (maxVal - minVal) || 10;
+      const w = 620, h = 185, padL = 38, padR = 24, padT = 18, padB = 26;
+
+      const toXY = (yrIdx, val) => {
+        const x = padL + (yrIdx / 10) * (w - padL - padR);
+        const y = h - padB - ((val - minVal) / span) * (h - padT - padB);
+        return [Number(x.toFixed(1)), Number(y.toFixed(1))];
+      };
+
+      const optPts = series.map((s, i) => toXY(i, s.opt));
+      const medPts = series.map((s, i) => toXY(i, s.med));
+      const conPts = series.map((s, i) => toXY(i, s.con));
+      const prinPts = series.map((s, i) => toXY(i, s.prin));
+
+      const fanPolygon = [
+        ...optPts.map(p => p.join(",")),
+        ...[...conPts].reverse().map(p => p.join(","))
+      ].join(" ");
+
+      const gridLines = [0.25, 0.6, 0.95].map(ratio => {
+        const v = minVal + span * ratio;
+        const y = (h - padB - ratio * (h - padT - padB)).toFixed(1);
+        return `
+          <line x1="${padL}" y1="${y}" x2="${w - padR}" y2="${y}" stroke="var(--border-hairline)" stroke-dasharray="3 3" />
+          <text x="${padL - 6}" y="${Number(y) + 3}" text-anchor="end" fill="var(--text-muted)" font-size="10">${Math.round(v)}万</text>
+        `;
+      }).join("");
+
+      const hoverNodes = series.map((s, i) => {
+        const [mx, my] = medPts[i];
+        const [ox, oy] = optPts[i];
+        const [cx, cy] = conPts[i];
+        return `
+          <g style="cursor:pointer;" onmouseenter="updateFanHoverReadout('${wId}', ${s.yr}, ${s.prin}, ${s.con}, ${s.med}, ${s.opt})">
+            <line x1="${mx}" y1="${padT}" x2="${mx}" y2="${h - padB}" stroke="transparent" stroke-width="24" />
+            <circle cx="${ox}" cy="${oy}" r="3" fill="#1D9E53" />
+            <circle cx="${cx}" cy="${cy}" r="3" fill="#5856D6" />
+            <circle cx="${mx}" cy="${my}" r="4.5" fill="#0071E3" stroke="#FFFFFF" stroke-width="2" />
+            <text x="${mx}" y="${h - 6}" text-anchor="middle" fill="var(--text-muted)" font-size="10.5">${i === 0 ? "本金" : `第${i}年`}</text>
+          </g>
+        `;
+      }).join("");
+
+      const svgHolder = document.getElementById(`fan-svg-holder-${wId}`);
+      if (svgHolder) {
+        svgHolder.innerHTML = `
+          <svg viewBox="0 0 ${w} ${h}" width="100%" height="185" style="overflow:visible;">
+            <defs>
+              <linearGradient id="fanGrad-${wId}" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1D9E53" stop-opacity="0.22" />
+                <stop offset="50%" stop-color="#0071E3" stop-opacity="0.16" />
+                <stop offset="100%" stop-color="#5856D6" stop-opacity="0.06" />
+              </linearGradient>
+            </defs>
+            ${gridLines}
+            <polygon points="${fanPolygon}" fill="url(#fanGrad-${wId})" />
+            <polyline points="${prinPts.map(p => p.join(",")).join(" ")}" fill="none" stroke="#8E8E93" stroke-width="1.5" stroke-dasharray="4 4" />
+            <polyline points="${conPts.map(p => p.join(",")).join(" ")}" fill="none" stroke="#5856D6" stroke-width="1.8" stroke-dasharray="5 3" />
+            <polyline points="${optPts.map(p => p.join(",")).join(" ")}" fill="none" stroke="#1D9E53" stroke-width="1.8" stroke-dasharray="5 3" />
+            <polyline points="${medPts.map(p => p.join(",")).join(" ")}" fill="none" stroke="#0071E3" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+            ${hoverNodes}
+          </svg>
+        `;
+      }
+
+      const y3 = series[3], y5 = series[5], y10 = series[10];
+      const kpiStrip = document.getElementById(`fan-kpi-strip-${wId}`);
+      if (kpiStrip) {
+        kpiStrip.innerHTML = `
+          <div class="wb-kpi-card">
+            <span>第 3 年中位预期资产</span>
+            <strong style="color:var(--accent-blue);">¥${y3.med} 万</strong>
+            <small>概率区间：${y3.con}万 (保守) ~ ${y3.opt}万 (乐观)</small>
+          </div>
+          <div class="wb-kpi-card">
+            <span>第 5 年中位预期资产</span>
+            <strong style="color:var(--accent-blue);">¥${y5.med} 万</strong>
+            <small>较投入本金净增值 +${(y5.med - y5.prin).toFixed(1)} 万</small>
+          </div>
+          <div class="wb-kpi-card">
+            <span>第 10 年财富复利终值</span>
+            <strong style="color:var(--accent-green);">¥${y10.med} 万</strong>
+            <small>90%乐观上界可达 ¥${y10.opt} 万 (底线 ¥${y10.con} 万)</small>
+          </div>
+        `;
+      }
+
+      updateFanHoverReadout(wId, 10, y10.prin, y10.con, y10.med, y10.opt);
+    };
+
+    window.updateFanHoverReadout = function(wId, yr, prin, con, med, opt) {
+      const banner = document.getElementById(`fan-readout-${wId}`);
+      if (!banner) return;
+      const gain = (med - prin).toFixed(1);
+      banner.innerHTML = `
+        <span><strong>${yr === 0 ? "初始投入期" : `第 ${yr} 年财富预测`}</strong> · 累计本金 <strong>${prin}万</strong></span>
+        <span>
+          保守底线 <strong style="color:var(--accent-indigo);">${con}万</strong> ·
+          中位预期 <strong style="color:var(--accent-blue);">${med}万 (+${gain}万)</strong> ·
+          乐观上界 <strong style="color:var(--accent-green);">${opt}万</strong>
+        </span>
+      `;
+    };
+
+    window.selectStressScenario = function(wId, scenKey) {
+      const wb = document.getElementById(`wb-${wId}`);
+      if (!wb) return;
+      wb.setAttribute("data-stress", scenKey);
+      wb.querySelectorAll(".stress-scen-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("data-stress-key") === scenKey);
+      });
+      renderStressSandboxChart(wId, scenKey);
+    };
+
+    window.renderStressSandboxChart = function(wId, scenKey) {
+      const wb = document.getElementById(`wb-${wId}`);
+      if (!wb) return;
+      const key = scenKey || wb.getAttribute("data-stress") || "crash_2020";
+      const amtWan = parseFloat(wb.getAttribute("data-amt-wan")) || 50;
+      const sc = STRESS_SCENARIO_DB[key] || STRESS_SCENARIO_DB.crash_2020;
+
+      const allVals = [...sc.luminaSeries, ...sc.benchSeries, 2, -5];
+      const minV = Math.min(...allVals) - 2;
+      const maxV = Math.max(...allVals) + 2;
+      const span = (maxV - minV) || 10;
+      const w = 620, h = 172, padL = 42, padR = 24, padT = 18, padB = 26;
+
+      const toXY = (idx, val) => {
+        const x = padL + (idx / (sc.stages.length - 1)) * (w - padL - padR);
+        const y = h - padB - ((val - minV) / span) * (h - padT - padB);
+        return [Number(x.toFixed(1)), Number(y.toFixed(1))];
+      };
+
+      const zeroY = toXY(0, 0)[1];
+      const lumPts = sc.luminaSeries.map((v, i) => toXY(i, v));
+      const benPts = sc.benchSeries.map((v, i) => toXY(i, v));
+
+      const gapPoly = [
+        ...lumPts.map(p => p.join(",")),
+        ...[...benPts].reverse().map(p => p.join(","))
+      ].join(" ");
+
+      const nodesHtml = sc.stages.map((stg, i) => {
+        const [lx, ly] = lumPts[i];
+        const [bx, by] = benPts[i];
+        const lv = sc.luminaSeries[i];
+        const bv = sc.benchSeries[i];
+        return `
+          <g style="cursor:pointer;" onmouseenter="updateStressHoverReadout('${wId}', '${sc.title}', '${stg}', ${lv}, ${bv}, '${sc.benchName}')">
+            <line x1="${lx}" y1="${padT}" x2="${lx}" y2="${h - padB}" stroke="transparent" stroke-width="28" />
+            <circle cx="${bx}" cy="${by}" r="3.5" fill="#D9383A" stroke="#FFFFFF" stroke-width="1.5" />
+            <circle cx="${lx}" cy="${ly}" r="4.5" fill="#0071E3" stroke="#FFFFFF" stroke-width="2" />
+            <text x="${lx}" y="${h - 6}" text-anchor="middle" fill="var(--text-muted)" font-size="10">${stg}</text>
+          </g>
+        `;
+      }).join("");
+
+      const holder = document.getElementById(`stress-svg-holder-${wId}`);
+      if (holder) {
+        holder.innerHTML = `
+          <svg viewBox="0 0 ${w} ${h}" width="100%" height="172" style="overflow:visible;">
+            <line x1="${padL}" y1="${zeroY}" x2="${w - padR}" y2="${zeroY}" stroke="var(--border-hairline)" stroke-width="1.5" />
+            <text x="${padL - 6}" y="${zeroY + 3}" text-anchor="end" fill="var(--text-muted)" font-size="10">0.0%</text>
+            <polygon points="${gapPoly}" fill="rgba(0, 113, 227, 0.10)" />
+            <polyline points="${benPts.map(p => p.join(",")).join(" ")}" fill="none" stroke="#D9383A" stroke-width="2" stroke-dasharray="5 4" />
+            <polyline points="${lumPts.map(p => p.join(",")).join(" ")}" fill="none" stroke="#0071E3" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+            ${nodesHtml}
+          </svg>
+        `;
+      }
+
+      const lumLossYuan = Math.round(amtWan * 10000 * (sc.luminaMaxDd / 100));
+      const benLossYuan = Math.round(amtWan * 10000 * (sc.benchMaxDd / 100));
+      const savedYuan = Math.abs(benLossYuan - lumLossYuan);
+
+      const kpiStrip = document.getElementById(`stress-kpi-strip-${wId}`);
+      if (kpiStrip) {
+        kpiStrip.innerHTML = `
+          <div class="wb-kpi-card">
+            <span>极端情景最大回撤对比</span>
+            <strong style="color:var(--accent-blue);">澜景 ${sc.luminaMaxDd}% vs 基准 ${sc.benchMaxDd}%</strong>
+            <small>按 ${amtWan}万 测算：最大浮亏 ¥${Math.abs(lumLossYuan).toLocaleString()} (基准 ¥${Math.abs(benLossYuan).toLocaleString()})</small>
+          </div>
+          <div class="wb-kpi-card">
+            <span>危机防御安全垫保护额</span>
+            <strong style="color:var(--accent-green);">为您少亏损 ¥${savedYuan.toLocaleString()}</strong>
+            <small>${sc.insight.slice(0, 36)}...</small>
+          </div>
+          <div class="wb-kpi-card">
+            <span>净值恢复新高周期</span>
+            <strong style="color:var(--accent-indigo);">${sc.luminaRecoveryDays} 天快速修复</strong>
+            <small>${sc.benchName}需 ${sc.benchRecoveryDays} 天恢复期初净值</small>
+          </div>
+        `;
+      }
+
+      const lastIdx = sc.stages.length - 1;
+      updateStressHoverReadout(wId, sc.title, sc.stages[2], sc.luminaSeries[2], sc.benchSeries[2], sc.benchName);
+    };
+
+    window.updateStressHoverReadout = function(wId, title, stageName, lumPct, benPct, benchName) {
+      const el = document.getElementById(`stress-readout-${wId}`);
+      if (!el) return;
+      const diff = (lumPct - benPct).toFixed(1);
+      el.innerHTML = `
+        <span><strong>${title} · ${stageName}</strong></span>
+        <span>
+          澜景组合 <strong style="color:var(--accent-blue);">${lumPct > 0 ? "+" : ""}${lumPct}%</strong> vs
+          ${benchName} <strong style="color:var(--accent-coral);">${benPct > 0 ? "+" : ""}${benPct}%</strong>
+          （超额抗跌保护 <strong style="color:var(--accent-green);">+${diff}%</strong>）
+        </span>
+      `;
+    };
+
+    window.renderDualRingComparison = function(wId) {
+      const holder = document.getElementById(`ring-holder-${wId}`);
+      if (!holder) return;
+
+      // Helper to build SVG multi-segment donut ring
+      function buildDonutSvg(segments, centerTitle, centerSub, ringIdPrefix) {
+        const r = 48, cx = 66, cy = 66;
+        const circum = 2 * Math.PI * r;
+        let offset = 0;
+        const circles = segments.map((seg, idx) => {
+          const len = (seg.pct / 100) * circum;
+          const svgSeg = `
+            <circle
+              class="donut-arc-${ringIdPrefix}-${idx}"
+              cx="${cx}" cy="${cy}" r="${r}"
+              fill="none"
+              stroke="${seg.color}"
+              stroke-width="16"
+              stroke-dasharray="${len} ${circum}"
+              stroke-dashoffset="${-offset}"
+              transform="rotate(-90 ${cx} ${cy})"
+              style="transition:all 0.3s ease;"
+            />
+          `;
+          offset += len;
+          return svgSeg;
+        }).join("");
+
+        return `
+          <svg width="132" height="132" viewBox="0 0 132 132">
+            <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--border-hairline)" stroke-width="16" />
+            ${circles}
+            <text x="${cx}" y="${cy - 3}" text-anchor="middle" fill="var(--text-primary)" font-size="12" font-weight="700">${centerTitle}</text>
+            <text x="${cx}" y="${cy + 13}" text-anchor="middle" fill="var(--text-muted)" font-size="10">${centerSub}</text>
+          </svg>
+        `;
+      }
+
+      const beforeSegs = [
+        { name: "高波偏股基金", pct: 45, color: "#D9383A" },
+        { name: "低息活期存款", pct: 35, color: "#8E8E93" },
+        { name: "债券型基金", pct: 20, color: "#0071E3" }
+      ];
+
+      const afterSegs = [
+        { name: "债券型基金", pct: 50, color: "#0071E3" },
+        { name: "红利平衡混合", pct: 25, color: "#5856D6" },
+        { name: "货币基金", pct: 15, color: "#1D9E53" },
+        { name: "结构性存款", pct: 10, color: "#E67E00" }
+      ];
+
+      holder.innerHTML = `
+        <div class="dual-ring-layout">
+          <div class="rings-stage">
+            <div class="ring-box">
+              ${buildDonutSvg(beforeSegs, "夏普 0.76", "回撤 -11.8%", `pre-${wId}`)}
+              <div class="ring-box-title">调仓前 · 原始失衡结构</div>
+              <div class="ring-box-sub">45%高波股票 + 35%闲置活期</div>
+            </div>
+            <div style="font-size:18px;font-weight:700;color:var(--accent-blue);">→</div>
+            <div class="ring-box">
+              ${buildDonutSvg(afterSegs, "夏普 1.42", "回撤 -2.8%", `post-${wId}`)}
+              <div class="ring-box-title">调仓后 · 澜景四维组合</div>
+              <div class="ring-box-sub">50%纯债 + 25%红利 + 25%活钱稳守</div>
+            </div>
+          </div>
+
+          <div class="delta-list-box">
+            <div class="delta-row-item" onmouseenter="updateRingReadout('${wId}', '纯债底仓由 20% 增配至 50% (+30%)：引入招商安泽纯债作为组合压舱石，显著平滑权益市场波动。')">
+              <span><i class="dot-swatch" style="background:#0071E3;display:inline-block;margin-right:6px;"></i>债券型基金 (核心压舱石)</span>
+              <strong style="color:var(--accent-blue);">20% → 50% (+30%)</strong>
+            </div>
+            <div class="delta-row-item" onmouseenter="updateRingReadout('${wId}', '红利平衡混合由 0% 增配至 25% (+25%)：以高股息央企红利替代高估值科技股，兼顾分红现金流与温和增值。')">
+              <span><i class="dot-swatch" style="background:#5856D6;display:inline-block;margin-right:6px;"></i>红利平衡混合 (收益增强)</span>
+              <strong style="color:var(--accent-indigo);">0% → 25% (+25%)</strong>
+            </div>
+            <div class="delta-row-item" onmouseenter="updateRingReadout('${wId}', '货币与结构性存款合计配置 25%：盘活原有 35% 低息活期存款，兼顾 T+0 应急流动性与保本区间增厚。')">
+              <span><i class="dot-swatch" style="background:#1D9E53;display:inline-block;margin-right:6px;"></i>货币 + 结构性存款 (流动性与保本)</span>
+              <strong style="color:var(--accent-green);">35% → 25% (盘活增效)</strong>
+            </div>
+            <div class="delta-row-item" onmouseenter="updateRingReadout('${wId}', '高波动纯股票仓位由 45% 清零 (-45%)：严格执行投资者适当性匹配要求，彻底消除超标回撤风险源。')">
+              <span><i class="dot-swatch" style="background:#D9383A;display:inline-block;margin-right:6px;"></i>高波动单一股票 (超标风险源)</span>
+              <strong style="color:var(--accent-coral);">45% → 0% (合规剔除)</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="corr-matrix-box">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;">
+            <strong style="color:var(--text-primary);">跨资产低相关性对冲矩阵（点击任一系数查看分散化原理）</strong>
+            <span id="corr-note-${wId}" style="color:var(--accent-blue);">股债负相关性 (-0.24) 是降低组合整体波动的核心机制</span>
+          </div>
+          <div class="corr-grid">
+            <div></div>
+            <div style="font-weight:600;color:var(--text-secondary);">纯债基金</div>
+            <div style="font-weight:600;color:var(--text-secondary);">红利混合</div>
+            <div style="font-weight:600;color:var(--text-secondary);">货币基金</div>
+            <div style="font-weight:600;color:var(--text-secondary);">结构存款</div>
+
+            <div style="font-weight:600;color:var(--text-secondary);text-align:left;">纯债基金</div>
+            <div class="corr-cell" style="background:var(--pill-track);">1.00</div>
+            <div class="corr-cell" style="background:var(--accent-green-soft);color:var(--accent-green);" onclick="updateCorrNote('${wId}', '纯债基金 vs 红利混合 (-0.24)：显著负相关，股市回调时资金流入债市推动债券上涨，形成天然跷跷板对冲。')">-0.24 负相关</div>
+            <div class="corr-cell" style="background:var(--accent-blue-soft);color:var(--accent-blue);" onclick="updateCorrNote('${wId}', '纯债基金 vs 货币基金 (+0.12)：极低正相关，久期错配确保短期资金面波动不传导至中长期纯债底仓。')">+0.12 极低相关</div>
+            <div class="corr-cell" style="background:var(--accent-blue-soft);color:var(--accent-blue);" onclick="updateCorrNote('${wId}', '纯债基金 vs 结构性存款 (+0.05)：近乎零相关，结构性存款本金受存款保险保障，独立于债市波动。')">+0.05 零相关</div>
+
+            <div style="font-weight:600;color:var(--text-secondary);text-align:left;">红利混合</div>
+            <div class="corr-cell" style="background:var(--accent-green-soft);color:var(--accent-green);" onclick="updateCorrNote('${wId}', '红利混合 vs 纯债基金 (-0.24)：股债负相关翘翘板效应，使组合夏普比率提升至 1.42。')">-0.24 负相关</div>
+            <div class="corr-cell" style="background:var(--pill-track);">1.00</div>
+            <div class="corr-cell" style="background:var(--accent-blue-soft);color:var(--accent-blue);" onclick="updateCorrNote('${wId}', '红利混合 vs 货币基金 (+0.02)：零相关性，货币基金提供随时可支配的再平衡弹药。')">+0.02 零相关</div>
+            <div class="corr-cell" style="background:var(--accent-blue-soft);color:var(--accent-blue);" onclick="updateCorrNote('${wId}', '红利混合 vs 结构性存款 (+0.18)：温和低相关，看涨鲨鱼鳍结构在股指温和上涨时同步增厚收益，下跌时锁定保底利率。')">+0.18 低相关</div>
+          </div>
+        </div>
+      `;
+    };
+
+    window.updateRingReadout = function(wId, text) {
+      const el = document.getElementById(`ring-readout-${wId}`);
+      if (el) {
+        el.innerHTML = `<span>${text}</span><strong style="color:var(--accent-green);">夏普比率 0.76 → 1.42</strong>`;
+      }
+    };
+
+    window.updateCorrNote = function(wId, text) {
+      const el = document.getElementById(`corr-note-${wId}`);
+      if (el) el.textContent = text;
+    };
+
+    /* Interactive Allocation Capital Slider Handler */
+    window.onAllocationCapitalSlide = function(widgetId, amountWan) {
+      const amtWan = parseInt(amountWan, 10);
+      const wrap = document.getElementById(widgetId);
+      if (!wrap) return;
+
+      document.getElementById(`sim-amt-label-${widgetId}`).textContent = `${amtWan} 万元 (¥${(amtWan * 10000).toLocaleString()})`;
+      const estProfit = Math.round(amtWan * 10000 * 0.0485);
+      document.getElementById(`sim-profit-label-${widgetId}`).textContent = `预计首年收益约 +¥${estProfit.toLocaleString()}`;
+
+      wrap.querySelectorAll("[data-ratio-pct]").forEach(el => {
+        const pct = parseFloat(el.getAttribute("data-ratio-pct"));
+        const subWan = ((amtWan * pct) / 100).toFixed(1).replace(/\.0$/, "");
+        el.textContent = `配置金额 ${subWan}万`;
+      });
+
+      const wb = document.getElementById(`wb-${widgetId}`);
+      if (wb) {
+        wb.setAttribute("data-amt-wan", String(amtWan));
+        renderMonteCarloFanChart(widgetId);
+        renderStressSandboxChart(widgetId, wb.getAttribute("data-stress") || "crash_2020");
+      }
+    };
+
+    /* Open Product Detail Apple Sheet Modal */
+    window.openFundDetailSheet = function(fundName) {
+      const info = FUND_DETAIL_DB[fundName] || FUND_DETAIL_DB["招商安泽纯债 A"];
+      const modal = document.getElementById("sheetModalContent");
+      const backdrop = document.getElementById("sheetModalBackdrop");
+
+      const pts = info.points;
+      const minP = Math.min(...pts), maxP = Math.max(...pts);
+      const span = (maxP - minP) || 0.1;
+      const w = 500, h = 100, pad = 14;
+      const lineStr = pts.map((p, i) => {
+        const x = pad + (i / (pts.length - 1)) * (w - pad * 2);
+        const y = h - pad - ((p - minP) / span) * (h - pad * 2);
+        return `${x},${y}`;
+      }).join(" ");
+
+      modal.innerHTML = `
+        <div class="sheet-top">
+          <div>
+            <span class="tier-tag">${info.code} · ${info.category} · ${info.risk}</span>
+            <h3 style="font-size:20px;font-weight:700;margin-top:8px;color:var(--text-primary);">${fundName}</h3>
+          </div>
+          <button class="sheet-close-btn" onclick="closeSheetModal()">×</button>
+        </div>
+
+        <div class="sheet-kpi-grid">
+          <div class="sheet-kpi-box">
+            <span>近3年年化回报</span>
+            <strong style="color:var(--accent-green);">${info.return3y}</strong>
+          </div>
+          <div class="sheet-kpi-box">
+            <span>历史最大回撤</span>
+            <strong>${info.drawdown}</strong>
+          </div>
+          <div class="sheet-kpi-box">
+            <span>夏普比率 / 门槛</span>
+            <strong>${info.sharpe} · ${info.minBuy}</strong>
+          </div>
+        </div>
+
+        <div style="background:var(--surface-subtle);border-radius:var(--radius-md);padding:14px;margin-bottom:14px;">
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">历史累计净值走势 (近1年)</div>
+          <svg viewBox="0 0 ${w} ${h}" width="100%" height="96">
+            <polyline points="${lineStr}" fill="none" stroke="#0071E3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:18px;">
+          <p><strong>基金经理与策略：</strong>${info.manager}</p>
+          <p style="margin-top:4px;"><strong>交易费率与规则：</strong>${info.fee}</p>
+        </div>
+
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+          <button class="btn-apple secondary" onclick="closeSheetModal();showToast('已将《${fundName}》加入您的自选关注池');">
+            加入自选观察
+          </button>
+          <button class="btn-apple primary" onclick="closeSheetModal();showToast('已生成《${fundName}》模拟申购清单');">
+            纳入模拟申购组合
+          </button>
+        </div>
+      `;
+      backdrop.classList.add("open");
+    };
+
+    /* Open Interactive Portfolio Simulator Modal */
+    window.openSimulatorModal = function() {
+      const modal = document.getElementById("sheetModalContent");
+      const backdrop = document.getElementById("sheetModalBackdrop");
+
+      modal.innerHTML = `
+        <div class="sheet-top">
+          <div>
+            <span class="tier-tag">实时交互测算工具</span>
+            <h3 style="font-size:20px;font-weight:700;margin-top:8px;color:var(--text-primary);">智能资产配置收益试算器</h3>
+          </div>
+          <button class="sheet-close-btn" onclick="closeSheetModal()">×</button>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;">
+            <span>计划投入本金</span>
+            <strong id="modalSimAmtText" style="color:var(--accent-blue);font-size:16px;">100 万元 (¥1,000,000)</strong>
+          </div>
+          <input type="range" class="apple-range" id="modalSimRange" min="10" max="500" step="10" value="100" oninput="updateModalSimulator()" />
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <div style="font-size:13px;margin-bottom:8px;">选择目标风险策略</div>
+          <div class="seg-control" style="width:100%;display:grid;grid-template-columns:repeat(3,1fr);">
+            <button type="button" class="seg-btn" data-sim-tier="R1" onclick="selectModalSimTier('R1')">R1 谨慎稳守</button>
+            <button type="button" class="seg-btn active" data-sim-tier="R2" onclick="selectModalSimTier('R2')">R2 稳健固收+</button>
+            <button type="button" class="seg-btn" data-sim-tier="R3" onclick="selectModalSimTier('R3')">R3 股债平衡</button>
+          </div>
+        </div>
+
+        <div class="sheet-kpi-grid" id="modalSimKpis">
+          <div class="sheet-kpi-box">
+            <span>预计首年收益</span>
+            <strong style="color:var(--accent-green);" id="modalSimYr1">+¥48,500</strong>
+          </div>
+          <div class="sheet-kpi-box">
+            <span>预计3年复利收益</span>
+            <strong style="color:var(--accent-green);" id="modalSimYr3">+¥152,600</strong>
+          </div>
+          <div class="sheet-kpi-box">
+            <span>历史最大回撤控制</span>
+            <strong id="modalSimDd">-3.5% 以内</strong>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;">
+          <button class="btn-apple secondary" onclick="closeSheetModal()">取消</button>
+          <button class="btn-apple primary" onclick="applyModalSimToStream()">生成此专属配置方案</button>
+        </div>
+      `;
+      window._modalSimTier = "R2";
+      backdrop.classList.add("open");
+    };
+
+    window.selectModalSimTier = function(tier) {
+      window._modalSimTier = tier;
+      document.querySelectorAll("[data-sim-tier]").forEach(b => {
+        b.classList.toggle("active", b.getAttribute("data-sim-tier") === tier);
+      });
+      updateModalSimulator();
+    };
+
+    window.updateModalSimulator = function() {
+      const amtWan = parseInt(document.getElementById("modalSimRange").value, 10);
+      const tier = window._modalSimTier || "R2";
+      document.getElementById("modalSimAmtText").textContent = `${amtWan} 万元 (¥${(amtWan * 10000).toLocaleString()})`;
+
+      const rates = {
+        R1: { r: 0.031, dd: "-1.0% 以内" },
+        R2: { r: 0.0485, dd: "-3.5% 以内" },
+        R3: { r: 0.064, dd: "-6.8% 以内" }
+      }[tier];
+
+      const yr1 = Math.round(amtWan * 10000 * rates.r);
+      const yr3 = Math.round(amtWan * 10000 * (Math.pow(1 + rates.r, 3) - 1));
+      document.getElementById("modalSimYr1").textContent = `+¥${yr1.toLocaleString()}`;
+      document.getElementById("modalSimYr3").textContent = `+¥${yr3.toLocaleString()}`;
+      document.getElementById("modalSimDd").textContent = rates.dd;
+    };
+
+    window.applyModalSimToStream = function() {
+      const amtWan = parseInt(document.getElementById("modalSimRange").value, 10);
+      const tier = window._modalSimTier || "R2";
+      const tierNames = { R1: "R1-谨慎型", R2: "R2-稳健型", R3: "R3-平衡型" };
+      closeSheetModal();
+      triggerScenario("alloc_reject_loop", `我有${amtWan}万闲钱，按${tierNames[tier]}策略帮我定制资产配置方案`);
+      showToast(`已为您生成 ${amtWan} 万元 (${tierNames[tier]}) 配置方案`);
+    };
+
+    window.closeSheetModal = function(e) {
+      document.getElementById("sheetModalBackdrop").classList.remove("open");
+    };
+
+    function formatAssistantProse(text) {
+      if (!text) return "";
+      const paragraphs = text.split("\n\n");
+      return paragraphs.map(p => {
+        const clean = p.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+        if (clean.trim().startsWith(">")) {
+          return `
+            <div class="guard-callout">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              <div>${clean.replace(/^>\s*/, "")}</div>
+            </div>
+          `;
+        }
+        return `<p>${clean}</p>`;
+      }).join("");
+    }
+
+    function appendUserTurn(queryText) {
+      const stream = document.getElementById("chatStream");
+      const div = document.createElement("div");
+      div.className = "msg-user";
+      div.textContent = queryText;
+      stream.appendChild(div);
+      stream.scrollTop = stream.scrollHeight;
+    }
+
+    let widgetSeq = 0;
+
+    function appendAssistantResponse(data) {
+      renderClientProgress(data);
+      const stream = document.getElementById("chatStream");
+      const wrap = document.createElement("div");
+      wrap.className = "msg-assistant";
+      const wId = `w_${++widgetSeq}`;
+
+      let widgetsHtml = "";
+
+      // 1. Interactive Market Overview Card
+      if (data.market_card) {
+        const mc = data.market_card;
+        const idxHtml = mc.indices.map((i, idx) => {
+          const shortName = i.name.split(" ")[0];
+          return `
+            <div class="m-card ${idx === 0 ? "selected" : ""}" data-idx-name="${shortName}" onclick="switchMarketChartState('${wId}', '${shortName}', null)">
+              <div class="m-card-name">${shortName}</div>
+              <div class="m-card-main">
+                <span class="m-card-val">${i.close}</span>
+                <span class="m-card-pill">${i.change_5d}</span>
+              </div>
+            </div>
+          `;
+        }).join("");
+
+        widgetsHtml += `
+          <div class="bento-widget" id="${wId}" data-idx="沪深300" data-period="5D">
+            <div class="w-header">
+              <span class="w-title">核心市场指数与多周期走势（点击指数卡片或周期可交互切换）</span>
+              <div class="seg-control">
+                <button type="button" class="seg-btn active" data-per="5D" onclick="switchMarketChartState('${wId}', null, '5D')">近5日</button>
+                <button type="button" class="seg-btn" data-per="1M" onclick="switchMarketChartState('${wId}', null, '1M')">近1月</button>
+                <button type="button" class="seg-btn" data-per="1Q" onclick="switchMarketChartState('${wId}', null, '1Q')">近1季</button>
+                <button type="button" class="seg-btn" data-per="1Y" onclick="switchMarketChartState('${wId}', null, '1Y')">近1年</button>
+              </div>
+            </div>
+            <div class="market-cards-row">${idxHtml}</div>
+            <div class="interactive-chart-box">
+              <div class="chart-meta-top">
+                <span id="readout-${wId}">鼠标悬停曲线节点可查看当日精确点位</span>
+                <span>数据来源：实时行情中心</span>
+              </div>
+              <div id="chart-svg-${wId}"></div>
+            </div>
+            <div class="macro-row-grid">
+              <div class="macro-box"><span>居民消费 CPI</span><strong>${mc.macro.cpi_yoy}</strong></div>
+              <div class="macro-box"><span>制造业 PMI</span><strong>${mc.macro.pmi_manufacturing}</strong></div>
+              <div class="macro-box"><span>广义货币 M2</span><strong>${mc.macro.m2_yoy}</strong></div>
+              <div class="macro-box"><span>10年期国债收益率</span><strong>${mc.macro.bond_10y_yield}</strong></div>
+            </div>
+          </div>
+        `;
+        setTimeout(() => renderInteractiveMarketChart(wId, "沪深300", "5D"), 30);
+      }
+
+      // 2. Interactive 5-Dimension Risk Assessment Card
+      if (data.risk_card) {
+        const rc = data.risk_card;
+        const radarSvg = buildSmoothRadarSvg(rc.dimensions);
+        const slidersHtml = Object.entries(rc.dimensions).map(([k, v]) => `
+          <div class="dim-slider-row">
+            <span class="dim-label">${k}</span>
+            <input type="range" class="apple-range" min="1" max="10" step="1" value="${v}" data-dim="${k}" oninput="onRiskSliderInput('${wId}')" />
+            <span class="dim-val-badge" data-dim-val="${k}">${v} / 10</span>
+          </div>
+        `).join("");
+
+        widgetsHtml += `
+          <div class="bento-widget" id="${wId}">
+            <div class="w-header">
+              <span class="w-title">五维度风险承受能力评估（可拖动滑块实时微调偏好）</span>
+              <span class="detail-link-pill" id="risk-pill-${wId}">综合评分 ${rc.score} 分 · ${rc.risk_level}</span>
+            </div>
+            <div class="risk-interactive-grid">
+              <div class="radar-card">
+                <div id="radar-holder-${wId}">${radarSvg}</div>
+                <span style="font-size:11.5px;color:var(--text-muted);margin-top:4px;">五维动态均衡图</span>
+              </div>
+              <div class="dim-sliders-stack">${slidersHtml}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      // 3. Interactive Portfolio Allocation & Clickable Fund Table
+      if (data.allocation_card) {
+        const ac = data.allocation_card;
+        const colors = ["#0071E3", "#5856D6", "#1D9E53", "#E67E00"];
+        const initWan = parseInt(ac.total_amount, 10) || 50;
+
+        const barSegs = ac.allocation.map((a, i) => `
+          <div class="seg-bar-piece" style="width:${a.ratio_pct}%;background:${colors[i % colors.length]};"></div>
+        `).join("");
+
+        const allocCells = ac.allocation.map((a, i) => `
+          <div class="alloc-bento-cell">
+            <div class="alloc-cell-head">
+              <i class="dot-swatch" style="background:${colors[i % colors.length]};"></i>
+              <span>${a.category}</span>
+            </div>
+            <div class="alloc-cell-pct">${a.ratio_str}</div>
+            <div class="alloc-cell-amt" data-ratio-pct="${a.ratio_pct}">配置金额 ${a.amount_wan}</div>
+          </div>
+        `).join("");
+
+        const prodRows = ac.products.map(p => `
+          <tr onclick="openFundDetailSheet('${p.name}')" title="点击查看《${p.name}》净值曲线与费率详情">
+            <td style="font-weight:600;color:var(--text-primary);">${p.name}</td>
+            <td>${p.category}</td>
+            <td><span class="tier-tag">${p.risk_level}</span></td>
+            <td style="color:var(--accent-green);font-weight:600;">+${p.annual_return_3y}%</td>
+            <td>${p.max_drawdown}%</td>
+            <td><span class="detail-link-pill">查看详情 &gt;</span></td>
+          </tr>
+        `).join("");
+
+        widgetsHtml += `
+          <div class="bento-widget" id="${wId}">
+            <div class="w-header">
+              <span class="w-title">专属资产配置方案（点击表内任一基金可查看净值详情）</span>
+              <span class="detail-link-pill">预期年化回报 ${ac.performance.expected_return_range}</span>
+            </div>
+
+            <div class="sim-control-panel">
+              <div class="sim-slider-group">
+                <div class="sim-slider-top">
+                  <span>拖动滑块实时调整投入本金：</span>
+                  <strong id="sim-amt-label-${wId}">${initWan} 万元 (¥${(initWan * 10000).toLocaleString()})</strong>
+                </div>
+                <input type="range" class="apple-range" min="10" max="500" step="10" value="${initWan}" oninput="onAllocationCapitalSlide('${wId}', this.value)" />
+              </div>
+              <div style="font-size:13px;font-weight:600;color:var(--accent-green);" id="sim-profit-label-${wId}">
+                预计首年收益约 +¥${Math.round(initWan * 10000 * 0.0485).toLocaleString()}
+              </div>
+            </div>
+
+            <div class="segmented-pill-bar">${barSegs}</div>
+            <div class="alloc-bento-grid">${allocCells}</div>
+
+            ${buildAnalyticsWorkbenchHtml(wId, initWan, "fan")}
+
+            <div class="product-table-box">
+              <table class="product-table">
+                <thead>
+                  <tr>
+                    <th>严选产品名称 (点击查看详情)</th>
+                    <th>资产类别</th>
+                    <th>风险等级</th>
+                    <th>近3年年化</th>
+                    <th>最大回撤</th>
+                    <th>产品档案</th>
+                  </tr>
+                </thead>
+                <tbody>${prodRows}</tbody>
+              </table>
+            </div>
+            <div style="margin-top:12px;font-size:12px;color:var(--text-muted);">
+              温馨提示：${ac.disclosure}
+            </div>
+          </div>
+        `;
+        setTimeout(() => {
+          renderMonteCarloFanChart(wId);
+          renderStressSandboxChart(wId, "crash_2020");
+          renderDualRingComparison(wId);
+        }, 30);
+      }
+
+      // 4. Holdings Attribution & Report Card
+      if (data.report_card) {
+        const rpc = data.report_card;
+        const m = rpc.metrics;
+        const rptWId = `rpt_${wId}`;
+        const rptWan = Math.round((m.total_market_value || 500000) / 10000);
+        const holdRows = rpc.holdings.map(h => `
+          <tr onclick="openFundDetailSheet('${h.name}')">
+            <td style="font-weight:600;color:var(--text-primary);">${h.name}</td>
+            <td>${h.category}</td>
+            <td>¥${h.cost.toLocaleString()}</td>
+            <td>¥${h.market_value.toLocaleString()}</td>
+            <td style="font-weight:600;color:${h.return_pct >= 0 ? "var(--accent-green)" : "var(--accent-coral)"};">
+              ${h.return_pct >= 0 ? "+" : ""}${h.return_pct}%
+            </td>
+            <td><span class="detail-link-pill">详情 &gt;</span></td>
+          </tr>
+        `).join("");
+
+        widgetsHtml += `
+          <div class="bento-widget" id="${rptWId}">
+            <div class="w-header">
+              <span class="w-title">${rpc.user_name} · 持仓收益归因与调仓报告</span>
+              <span class="detail-link-pill" style="color:var(--accent-green);background:var(--accent-green-soft);">跑赢同期基准 +${m.excess_alpha_pct}%</span>
+            </div>
+            <div class="alloc-bento-grid">
+              <div class="alloc-bento-cell">
+                <div class="alloc-cell-head">持仓总市值</div>
+                <div class="alloc-cell-pct">¥${(m.total_market_value / 10000).toFixed(2)}万</div>
+                <div class="alloc-cell-amt">投入本金 ¥${(m.total_cost / 10000).toFixed(2)}万</div>
+              </div>
+              <div class="alloc-bento-cell">
+                <div class="alloc-cell-head">累计净收益</div>
+                <div class="alloc-cell-pct" style="color:var(--accent-green);">+¥${m.total_profit.toLocaleString()}</div>
+                <div class="alloc-cell-amt">累计收益率 +${m.portfolio_return_pct}%</div>
+              </div>
+              <div class="alloc-bento-cell">
+                <div class="alloc-cell-head">超额回报 Alpha</div>
+                <div class="alloc-cell-pct">+${m.excess_alpha_pct}%</div>
+                <div class="alloc-cell-amt">同期沪深300 +${m.benchmark_hs300_pct}%</div>
+              </div>
+              <div class="alloc-bento-cell">
+                <div class="alloc-cell-head">最大回撤控制</div>
+                <div class="alloc-cell-pct">${m.max_drawdown_pct}%</div>
+                <div class="alloc-cell-amt">夏普比率 ${m.sharpe_ratio}</div>
+              </div>
+            </div>
+
+            ${buildAnalyticsWorkbenchHtml(rptWId, rptWan, "ring")}
+
+            <div class="product-table-box">
+              <table class="product-table">
+                <thead>
+                  <tr><th>持仓产品名称</th><th>资产类别</th><th>持仓成本</th><th>最新市值</th><th>持有收益率</th><th>操作</th></tr>
+                </thead>
+                <tbody>${holdRows}</tbody>
+              </table>
+            </div>
+            <div style="margin-top:14px;padding:14px 16px;background:var(--surface-card);border-radius:var(--radius-md);border:1px solid var(--border-card);font-size:13px;line-height:1.6;color:var(--text-secondary);">
+              <p><strong>收益归因分析：</strong>${rpc.attribution}</p>
+              <p style="margin-top:6px;"><strong>专业调仓建议：</strong>${rpc.advice}</p>
+            </div>
+          </div>
+        `;
+        setTimeout(() => {
+          renderMonteCarloFanChart(rptWId);
+          renderStressSandboxChart(rptWId, "crash_2020");
+          renderDualRingComparison(rptWId);
+        }, 30);
+      }
+
+      // 5. Client Confirmation Sheet
+      if (data.status === "INTERRUPTED") {
+        if (data.interrupt_type === "RISK_CONFIRM") {
+          widgetsHtml += `
+            <div class="confirm-card">
+              <div class="confirm-pill">待您本人确认</div>
+              <div class="confirm-heading">${data.interrupt_title}</div>
+              <div class="confirm-copy">${data.interrupt_desc}</div>
+              <div class="confirm-btn-group">
+                <button class="btn-apple primary" onclick="handleResume('RiskAgent', 'confirm')">
+                  确认测评结果并生效
+                </button>
+                <button class="btn-apple secondary" onclick="handleResume('RiskAgent', 'reassess')">
+                  近期有买房支出计划，申请重新评估
+                </button>
+              </div>
+            </div>
+          `;
+        } else if (data.interrupt_type === "ADVISOR_REVIEW") {
+          widgetsHtml += `
+            <div class="confirm-card">
+              <div class="confirm-pill">尊享理财师复核</div>
+              <div class="confirm-heading">${data.interrupt_title}</div>
+              <div class="confirm-copy">${data.interrupt_desc}</div>
+              <div class="confirm-btn-group">
+                <button class="btn-apple primary" onclick="handleResume('ReportAgent', 'approve')">
+                  审阅通过并正式签发报告
+                </button>
+                <button class="btn-apple secondary" onclick="handleResume('ReportAgent', 'rewrite')">
+                  优化分批止盈与税务筹划方案
+                </button>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      wrap.innerHTML = `
+        <div class="assistant-lead">${formatAssistantProse(data.assistant_message)}</div>
+        ${widgetsHtml}
+      `;
+      stream.appendChild(wrap);
+      stream.scrollTop = stream.scrollHeight;
+    }
+
+    // Offline Simulation Fallback
+    function buildOfflineSimulation(scenarioKey, query) {
+      const isHnw = currentUserId === "U_88888";
+      const userName = isHnw ? "周明轩" : "林知远";
+      const userRiskCode = isHnw ? "R3" : "R2";
+      const userRiskLabel = isHnw ? "R3-平衡型" : "R2-稳健型";
+
+      if (scenarioKey === "market_qa" || (!scenarioKey && (query.includes("大盘") || query.includes("行情")))) {
+        return {
+          status: "COMPLETED",
+          assistant_message:
+            "**震荡温和修复（结构性红利与稳健固收占优）**\n\n" +
+            "近期 A 股市场呈震荡温和修复态势，沪深 300 指数近 5 日上涨 +1.85%（估值处于历史中低分位），制造业 PMI 回升至 50.2% 扩张区间，10 年期国债收益率维持在 2.12%。当前环境下，建议以优质纯债基金与高股息红利资产作为核心稳健底仓。",
+          market_card: {
+            trend: "震荡温和修复",
+            indices: [
+              { name: "沪深300 (000300.SH)", close: "3,968.42", change_5d: "+1.85%" },
+              { name: "上证指数 (000001.SH)", close: "3,312.18", change_5d: "+1.42%" },
+              { name: "中证全债 (H11001.CSI)", close: "248.65", change_5d: "+0.22%" }
+            ],
+            macro: { cpi_yoy: "+0.4%", pmi_manufacturing: "50.2% (扩张)", m2_yoy: "+7.5%", bond_10y_yield: "2.12%" }
+          },
+          trace: [
+            { agent: "Orchestrator", node_id: "ORCH" },
+            { agent: "PortfolioAgent", node_id: "P1" },
+            { agent: "PortfolioAgent", node_id: "P2" }
+          ]
+        };
+      }
+
+      if (scenarioKey === "risk_assess" || scenarioKey === "pipeline_full" || query.includes("风险") || query.includes("全流程")) {
+        localSimPipelineAfterConfirm = (scenarioKey === "pipeline_full" || query.includes("全流程"));
+        const dims = isHnw
+          ? { "收入稳定性": 9, "投资经验": 8, "亏损容忍度": 6, "流动性需求": 7, "投资期限": 8 }
+          : { "收入稳定性": 8, "投资经验": 3, "亏损容忍度": 5, "流动性需求": 6, "投资期限": 7 };
+        const score = isHnw ? 74.5 : 58.5;
+        return {
+          status: "INTERRUPTED",
+          interrupted_node: "R8",
+          interrupt_type: "RISK_CONFIRM",
+          interrupt_title: "请确认您的风险承受能力测评结果",
+          interrupt_desc: `根据您的财务状况与投资偏好，系统评定您的风险承受能力为【${userRiskLabel}】（综合得分 ${score} 分）。依据《证券期货投资者适当性管理办法》，测评结果需由您本人确认后生效。`,
+          risk_card: { risk_code: userRiskCode, risk_level: userRiskLabel, score: score, dimensions: dims },
+          assistant_message: `您好，您的五维度风险承受能力测评已完成，评定结果为 **${userRiskLabel}**（综合评分 **${score}** 分）。请核对下方测评详情并确认结果；您也可以直接拖动滑块微调各项偏好。`,
+          trace: [
+            { agent: "Orchestrator", node_id: "ORCH" },
+            { agent: "RiskAgent", node_id: "R1" },
+            { agent: "RiskAgent", node_id: "R2" },
+            { agent: "RiskAgent", node_id: "R3" },
+            { agent: "RiskAgent", node_id: "R4" },
+            { agent: "RiskAgent", node_id: "R5", vector_used: true },
+            { agent: "RiskAgent", node_id: "R6" },
+            { agent: "RiskAgent", node_id: "R7" },
+            { agent: "RiskAgent", node_id: "R8", is_interrupt: true }
+          ]
+        };
+      }
+
+      if (scenarioKey === "report_flow" || query.includes("报告") || query.includes("持仓")) {
+        const holdings = isHnw ? [
+          { product_id: "FD_101", name: "招商安泽纯债 A", category: "债券型基金", cost: 3000000, market_value: 3138000, return_pct: 4.60 },
+          { product_id: "FD_201", name: "中欧红利智选平衡混合", category: "混合型基金", cost: 2500000, market_value: 2695000, return_pct: 7.80 },
+          { product_id: "FD_999", name: "华夏科创板半导体锐进股票", category: "股票型基金", cost: 1000000, market_value: 942000, return_pct: -5.80 }
+        ] : [
+          { product_id: "FD_101", name: "招商安泽纯债 A", category: "债券型基金", cost: 250000, market_value: 260500, return_pct: 4.20 },
+          { product_id: "FD_201", name: "中欧红利智选平衡混合", category: "混合型基金", cost: 150000, market_value: 160200, return_pct: 6.80 },
+          { product_id: "FD_301", name: "天弘云商宝货币 A", category: "货币基金", cost: 100000, market_value: 102100, return_pct: 2.10 }
+        ];
+        const metrics = isHnw
+          ? { total_cost: 6500000, total_market_value: 6775000, total_profit: 275000, portfolio_return_pct: 4.23, benchmark_hs300_pct: 3.12, excess_alpha_pct: 1.11, max_drawdown_pct: -3.45, sharpe_ratio: 1.28 }
+          : { total_cost: 500000, total_market_value: 522800, total_profit: 22800, portfolio_return_pct: 4.56, benchmark_hs300_pct: 3.12, excess_alpha_pct: 1.44, max_drawdown_pct: -1.85, sharpe_ratio: 1.42 };
+
+        const reportCard = {
+          user_name: userName,
+          investor_type: isHnw ? "尊享高净值客户" : "稳健型客户",
+          metrics: metrics,
+          holdings: holdings,
+          attribution: "纯债底仓（+4.2%~4.6%）与高股息红利混合（+6.8%~7.8%）提供稳健正收益贡献，整体组合跑赢同期沪深300基准。",
+          advice: isHnw
+            ? "建议将高波动科技成长仓位逢高分批止盈 5%，置换为高等级政金债基金以锁定年度超额收益。"
+            : "当前股债配比偏离度小于 2%，建议继续持有并通过红利再投资实现长期复利增值。"
+        };
+
+        const baseTrace = [
+          { agent: "Orchestrator", node_id: "ORCH" },
+          { agent: "ReportAgent", node_id: "RP1" },
+          { agent: "ReportAgent", node_id: "RP2" },
+          { agent: "ReportAgent", node_id: "RP3" },
+          { agent: "ReportAgent", node_id: "RP4" },
+          { agent: "ReportAgent", node_id: "RP5" }
+        ];
+
+        if (isHnw) {
+          baseTrace.push({ agent: "ReportAgent", node_id: "RP6", is_interrupt: true });
+          return {
+            status: "INTERRUPTED",
+            interrupted_node: "RP6",
+            interrupt_type: "ADVISOR_REVIEW",
+            interrupt_title: "尊享财富专户：专属理财师审阅中",
+            interrupt_desc: `尊敬的 ${userName}，您的 677.5 万元持仓分析与调仓报告已生成初稿，正由您的专属持牌理财师进行人工复核与税务筹划审阅。`,
+            report_card: reportCard,
+            assistant_message: "您的专属持仓收益归因与调仓报告初稿已生成。作为尊享高净值客户，报告正由您的专属持牌理财师进行复核审阅，请确认签发或提出调整意见。",
+            trace: baseTrace
+          };
+        }
+
+        baseTrace.push({ agent: "ReportAgent", node_id: "RP7" });
+        return {
+          status: "COMPLETED",
+          report_card: reportCard,
+          assistant_message: "您的持仓收益归因与调仓建议报告已生成，整体组合表现稳健并跑赢同期大盘基准，详情如下：",
+          trace: baseTrace
+        };
+      }
+
+      return buildPortfolioOfflineResult(userName, userRiskCode, userRiskLabel, true);
+    }
+
+    function buildPortfolioOfflineResult(userName, riskCode, riskLabel, withRejectLoop) {
+      const allocation = [
+        { category: "债券型基金", ratio_pct: 50, ratio_str: "50%", amount_yuan: 250000, amount_wan: "25万" },
+        { category: "混合型基金", ratio_pct: 25, ratio_str: "25%", amount_yuan: 125000, amount_wan: "12.5万" },
+        { category: "货币基金", ratio_pct: 15, ratio_str: "15%", amount_yuan: 75000, amount_wan: "7.5万" },
+        { category: "结构性存款", ratio_pct: 10, ratio_str: "10%", amount_yuan: 50000, amount_wan: "5万" }
+      ];
+      const products = [
+        { product_id: "FD_101", name: "招商安泽纯债 A", category: "债券型基金", risk_level: "R2", annual_return_3y: 4.2, max_drawdown: -1.8, bge_m3_score: 0.78 },
+        { product_id: "FD_201", name: "中欧红利智选平衡混合", category: "混合型基金", risk_level: "R2", annual_return_3y: 6.8, max_drawdown: -4.9, bge_m3_score: 0.79 },
+        { product_id: "FD_301", name: "天弘云商宝货币 A", category: "货币基金", risk_level: "R1", annual_return_3y: 2.1, max_drawdown: -0.05, bge_m3_score: 0.75 },
+        { product_id: "FD_401", name: "招行90天看涨鲨鱼鳍结构性存款", category: "结构性存款", risk_level: "R1", annual_return_3y: 3.5, max_drawdown: 0.0, bge_m3_score: 0.72 }
+      ];
+
+      const trace = [
+        { agent: "Orchestrator", node_id: "ORCH" },
+        { agent: "PortfolioAgent", node_id: "P1" },
+        { agent: "PortfolioAgent", node_id: "P2" },
+        { agent: "PortfolioAgent", node_id: "P3", vector_used: true },
+        { agent: "PortfolioAgent", node_id: "P4" },
+        { agent: "PortfolioAgent", node_id: "P5" },
+        { agent: "PortfolioAgent", node_id: "P6" }
+      ];
+
+      if (withRejectLoop) {
+        trace.push(
+          { agent: "PortfolioAgent", node_id: "P7", branch_loop: "适当性自动复核" },
+          { agent: "PortfolioAgent", node_id: "P3", vector_used: true },
+          { agent: "PortfolioAgent", node_id: "P6" }
+        );
+      }
+
+      trace.push(
+        { agent: "PortfolioAgent", node_id: "P7" },
+        { agent: "PortfolioAgent", node_id: "P8" }
+      );
+
+      return {
+        status: "COMPLETED",
+        allocation_card: {
+          user_name: userName,
+          risk_level: riskLabel,
+          total_amount: "50万元",
+          market_trend: "震荡温和修复",
+          allocation: allocation,
+          products: products,
+          performance: { expected_return_range: "4.5% - 5.2%", expected_max_drawdown: "-3.0% 至 -4.8%", sharpe_ratio: 1.24 },
+          disclosure: "过往业绩不预示未来表现，市场有风险，投资需谨慎。",
+          had_compliance_loop: withRejectLoop
+        },
+        assistant_message:
+          `已结合您的 **${riskLabel}** 风险偏好与当前 **震荡温和修复** 市场环境，为您定制 **50 万元专属资产配置方案**。` +
+          (withRejectLoop ? "\n\n> **适当性合规保障提示**：系统在构建组合时已自动为您剔除超出稳健型风险等级的高波动股票型产品，确保组合内全部标的 100% 匹配您的风险承受能力。" : ""),
+        trace: trace
+      };
+    }
+
+    async function triggerScenario(scenarioKey, queryText) {
+      document.querySelectorAll(".service-item").forEach(btn => btn.classList.remove("active"));
+      const activeBtn = document.getElementById(`scen-${scenarioKey}`);
+      if (activeBtn) activeBtn.classList.add("active");
+
+      appendUserTurn(queryText);
+
+      if (backendAvailable) {
+        try {
+          const resp = await fetch(`${API_BASE}/api/chat`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              thread_id: currentThreadId,
+              user_id: currentUserId,
+              query: queryText,
+              scenario_key: scenarioKey
+            })
+          });
+          if (resp.ok) {
+            const data = await resp.json();
+            appendAssistantResponse(data);
+            return;
+          }
+        } catch (e) {
+          console.warn("Fallback to local simulation:", e);
+        }
+      }
+
+      const simData = buildOfflineSimulation(scenarioKey, queryText);
+      appendAssistantResponse(simData);
+    }
+
+    async function handleResume(agentName, action) {
+      const actionLabel = {
+        confirm: "我已核对并确认上述风险承受能力测评结果",
+        reassess: "近期有买房首付支出计划，不希望本金亏损，申请重新评估",
+        approve: "审阅通过，同意正式签发本份持仓归因与调仓报告",
+        rewrite: "请将高波动科技仓位止盈拆分为两批执行，并补充税务筹划建议"
+      }[action];
+
+      appendUserTurn(actionLabel);
+
+      if (backendAvailable) {
+        try {
+          const resp = await fetch(`${API_BASE}/api/resume`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              thread_id: currentThreadId,
+              user_id: currentUserId,
+              agent: agentName,
+              action: action,
+              note: actionLabel
+            })
+          });
+          if (resp.ok) {
+            const data = await resp.json();
+            appendAssistantResponse(data);
+            showToast("已同步您的确认指令");
+            return;
+          }
+        } catch (e) {
+          console.warn("Resume fallback:", e);
+        }
+      }
+
+      if (agentName === "RiskAgent" && action === "reassess") {
+        const dims = { "收入稳定性": 8, "投资经验": 2, "亏损容忍度": 2, "流动性需求": 8, "投资期限": 4 };
+        appendAssistantResponse({
+          status: "INTERRUPTED",
+          interrupted_node: "R8",
+          interrupt_type: "RISK_CONFIRM",
+          interrupt_title: "风险测评已更新，请确认最新评估结果",
+          interrupt_desc: "已结合您补充的短期资金使用需求重新评估，最新风险承受能力等级为【R1-谨慎型】（综合得分 38.5 分）。请确认是否生效。",
+          risk_card: { risk_code: "R1", risk_level: "R1-谨慎型", score: 38.5, dimensions: dims },
+          assistant_message: "已根据您补充的流动性需求完成重新评估，您的风险承受能力等级已调整为 **R1-谨慎型**（38.5 分）。请确认最新测评结果。",
+          trace: [
+            { agent: "RiskAgent", node_id: "R3" },
+            { agent: "RiskAgent", node_id: "R4" },
+            { agent: "RiskAgent", node_id: "R8", is_interrupt: true }
+          ]
+        });
+        showToast("已重新评估为 R1-谨慎型");
+        return;
+      }
+
+      if (agentName === "RiskAgent" && action === "confirm") {
+        const isHnw = currentUserId === "U_88888";
+        const userName = isHnw ? "周明轩" : "林知远";
+        const riskCode = isHnw ? "R3" : "R2";
+        const riskLabel = isHnw ? "R3-平衡型" : "R2-稳健型";
+
+        if (localSimPipelineAfterConfirm) {
+          localSimPipelineAfterConfirm = false;
+          const portRes = buildPortfolioOfflineResult(userName, riskCode, riskLabel, false);
+          portRes.trace.unshift({ agent: "RiskAgent", node_id: "R9" });
+          portRes.assistant_message = `您的风险承受能力等级（**${riskLabel}**）已确认生效。\n\n结合您的风险画像与当前市场环境，已为您定制如下 **50 万元专属资产配置方案**：`;
+          appendAssistantResponse(portRes);
+          showToast("风险测评已生效并自动生成配置方案");
+          return;
+        }
+
+        appendAssistantResponse({
+          status: "COMPLETED",
+          assistant_message: `感谢确认，您的风险承受能力等级 **${riskLabel}** 已正式生效。现在您可以随时咨询资产配置方案或理财产品推荐。`,
+          trace: [{ agent: "RiskAgent", node_id: "R9" }]
+        });
+        showToast("风险承受能力等级已确认生效");
+        return;
+      }
+
+      if (agentName === "ReportAgent" && action === "rewrite") {
+        appendAssistantResponse({
+          status: "INTERRUPTED",
+          interrupted_node: "RP6",
+          interrupt_type: "ADVISOR_REVIEW",
+          interrupt_title: "专属投资报告已更新，待理财师最终确认",
+          interrupt_desc: "已结合审阅意见优化分批止盈与税务筹划方案，请确认是否正式签发。",
+          assistant_message: "已根据理财师意见优化分批调仓与税务筹划方案，请确认签发。",
+          trace: [
+            { agent: "ReportAgent", node_id: "RP5" },
+            { agent: "ReportAgent", node_id: "RP6", is_interrupt: true }
+          ]
+        });
+        showToast("已按审阅意见更新调仓建议");
+        return;
+      }
+
+      if (agentName === "ReportAgent" && action === "approve") {
+        appendAssistantResponse({
+          status: "COMPLETED",
+          assistant_message: "专属持牌理财师已复核签发，您的尊享持仓归因与调仓建议报告已正式生成。",
+          trace: [{ agent: "ReportAgent", node_id: "RP7" }]
+        });
+        showToast("专属投资报告已正式签发");
+      }
+    }
+
+    function handleCustomSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById("queryInput");
+      const q = input.value.trim();
+      if (!q) return;
+      input.value = "";
+      triggerScenario("", q);
+    }
+
+    window.addEventListener("DOMContentLoaded", async () => {
+      await checkBackend();
+      triggerScenario("market_qa", "最近大盘怎么样");
+    });
+  </script>
+</body>
+</html>

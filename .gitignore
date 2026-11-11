@@ -1,0 +1,27 @@
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Local model caches
+models/
+*.bin
+*.safetensors
+*.pt
+
+# OS & editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
