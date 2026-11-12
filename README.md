@@ -4,6 +4,37 @@
 
 ---
 
+## 界面预览
+
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <img src="assets/preview_workspace_light.png" alt="智能资产配置与未来 10 年财富概率扇面图" width="100%" />
+      <br />
+      <sub><b>智能配置与 10 年概率扇面</b> · <code>P7 -&gt; P3</code> 适当性拦截与本金滑块实时重算</sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="assets/preview_stress_sandbox.png" alt="历史极端行情压力测试沙盘与严选产品库" width="100%" />
+      <br />
+      <sub><b>极端行情压力沙盘与产品库</b> · 四大宏观情景回撤对比与净值详情联动</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="assets/preview_dark_rebalance.png" alt="深色模式私人银行持仓归因与相关性矩阵" width="100%" />
+      <br />
+      <sub><b>深色私人银行调仓工作台</b> · 调仓前后双环对比、相关性矩阵与 <code>RP6</code> 复核</sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="assets/preview_risk_hitl.png" alt="五维风险承受力雷达测评与人工断点确认" width="100%" />
+      <br />
+      <sub><b>五维风险雷达与断点确认</b> · 实时雷达滑块联动与 <code>R8</code> 合规人工确认</sub>
+    </td>
+  </tr>
+</table>
+
+---
+
 ## 核心特性
 
 ### 1. 多 Agent 分层编排与 24 节点合规状态机
@@ -42,7 +73,7 @@
 ├── tools.py            # 四层解耦工具集（规则计算 / 检索 / 中台接口 / LLM 语义工具）
 ├── storage.py          # PostgreSQL、Milvus、Redis 存储与混合检索驱动
 ├── index.html          # 客户端交互工作台与 SVG 金融可视化组件（含离线预览能力）
-├── assets/             # 界面视觉图像资源
+├── assets/             # 界面视觉素材与预览截图
 ├── .env.example        # 环境变量配置模板
 ├── .gitignore          # Git 忽略规则
 └── requirements.txt    # Python 依赖清单
